@@ -1,8 +1,8 @@
 package com.republicaargentina.sistemabibliotecabackend.service;
 
-import com.republicaargentina.sistemabibliotecabackend.entity.Autor;
+import com.republicaargentina.sistemabibliotecabackend.entity.Docente;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
-import com.republicaargentina.sistemabibliotecabackend.repository.AutorRepository;
+import com.republicaargentina.sistemabibliotecabackend.repository.DocenteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -16,15 +16,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AutorServiceImpl implements AutorService {
-    private final AutorRepository autorRepository;
-    private static final String MESSAGE = "No existe un autor con el ID ";
+public class DocenteServiceImpl implements DocenteService {
+    private final DocenteRepository docenteRepository;
+    private static final String MESSAGE = "No existe un docente con el ID ";
 
     @Override
     @Transactional(readOnly = true)
-    public List<Autor> getAll() {
+    public List<Docente> getAll() {
         try {
-            return autorRepository.findByOrderByNombreAsc();
+            return docenteRepository.findByOrderByApellidoAscNombreAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -32,9 +32,9 @@ public class AutorServiceImpl implements AutorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Autor> pagination(Pageable pageable) {
+    public Page<Docente> pagination(Pageable pageable) {
         try {
-            return autorRepository.paginationByOrderByNombreAsc(pageable);
+            return docenteRepository.paginationByOrderByApellidoAscNombreAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -42,9 +42,9 @@ public class AutorServiceImpl implements AutorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Autor getOne(Long id) {
+    public Docente getOne(Long id) {
         try {
-            return autorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return docenteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -52,9 +52,9 @@ public class AutorServiceImpl implements AutorService {
 
     @Override
     @Transactional
-    public Autor save(Autor autor) {
+    public Docente save(Docente docente) {
         try {
-            return autorRepository.save(autor);
+            return docenteRepository.save(docente);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -62,14 +62,17 @@ public class AutorServiceImpl implements AutorService {
 
     @Override
     @Transactional
-    public Autor update(Autor autor) {
-        if (autor.getId() == null) {
+    public Docente update(Docente docente) {
+        if (docente.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Autor autorById = autorRepository.findById(autor.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + autor.getId()));
+        Docente docenteById = docenteRepository.findById(docente.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + docente.getId()));
         try {
-            autorById.setNombre(autor.getNombre());
-            return autorRepository.save(autorById);
+            docenteById.setNombre(docente.getNombre());
+            docenteById.setApellido(docente.getApellido());
+            docenteById.setDni(docente.getDni());
+            docenteById.setTelefono(docente.getTelefono());
+            return docenteRepository.save(docenteById);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -82,13 +85,23 @@ public class AutorServiceImpl implements AutorService {
             throw new IllegalArgumentException("El identificador de necesario para la eliminación.");
         }
         try {
-            if (!autorRepository.existsById(id)) {
+            if (!docenteRepository.existsById(id)) {
                 throw new EntityNotFoundException(MESSAGE + id);
             }
-            autorRepository.deleteById(id);
+            docenteRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Docente findByDni(String dni) {
+        try {
+            return docenteRepository.findByDni(dni).orElseThrow(() -> new EntityNotFoundException("No existe con docente con el dni " + dni));
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

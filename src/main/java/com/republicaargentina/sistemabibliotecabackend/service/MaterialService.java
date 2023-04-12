@@ -18,4 +18,8 @@ public interface MaterialService {
     Material update(Material material);
 
     Boolean delete(Long id);
+
+    List<Material> findByNombreContainsIgnoreCaseOrderByNombreAsc(String nombre);
+
+    Page<Material> findByAreaNombreIgnoreCaseOrderByNombreAsc(String nombre, Pageable pageable);
 }

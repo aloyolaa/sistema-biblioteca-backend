@@ -24,7 +24,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public List<Editorial> getAll() {
         try {
-            return editorialRepository.findAll();
+            return editorialRepository.findByOrderByNombreAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public Page<Editorial> pagination(Pageable pageable) {
         try {
-            return editorialRepository.findAll(pageable);
+            return editorialRepository.paginationByOrderByNombreAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

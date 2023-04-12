@@ -21,20 +21,18 @@ public class Material extends BaseEntity {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Min(value = 1, message = "{Min.material.lotes}")
-    @NotNull(message = "{NotNull.material.lotes}")
-    @Column(name = "lotes", nullable = false)
-    private Integer lotes;
-
-    @Min(value = 1, message = "{Min.material.unidades}")
-    @NotNull(message = "{NotNull.material.unidades}")
-    @Column(name = "unidades", nullable = false)
-    private Integer unidades;
-
     @Column(name = "medidas")
     private String medidas;
 
-    @Column(name = "observaciones")
+    @Min(value = 1, message = "{Min.material.cantidadInicial}")
+    @NotNull(message = "{NotNull.material.cantidadInicial}")
+    @Column(name = "cantidad_inicial", nullable = false)
+    private Integer cantidadInicial;
+
+    @Column(name = "cantidad_actual")
+    private Integer cantidadActual;
+
+    @Column(name = "observaciones", length = 1000)
     private String observaciones;
 
     @NotNull(message = "{NotNull.material.area}")
@@ -42,4 +40,9 @@ public class Material extends BaseEntity {
     @JoinColumn(name = "area_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Area area;
+
+    @PrePersist
+    public void prePersist() {
+        this.cantidadActual = this.cantidadInicial;
+    }
 }

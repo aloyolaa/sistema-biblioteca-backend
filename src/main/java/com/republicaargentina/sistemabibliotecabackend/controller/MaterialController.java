@@ -48,4 +48,14 @@ public class MaterialController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(materialService.delete(id), HttpStatus.OK);
     }
+
+    @GetMapping("/findByNombre/{titulo}")
+    public ResponseEntity<List<Material>> getAllByNombre(@PathVariable String nombre) {
+        return new ResponseEntity<>(materialService.findByNombreContainsIgnoreCaseOrderByNombreAsc(nombre), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByArea/{nombre}")
+    public ResponseEntity<Page<Material>> getAllByArea(@PathVariable String nombre, Pageable pageable) {
+        return new ResponseEntity<>(materialService.findByAreaNombreIgnoreCaseOrderByNombreAsc(nombre, pageable), HttpStatus.OK);
+    }
 }

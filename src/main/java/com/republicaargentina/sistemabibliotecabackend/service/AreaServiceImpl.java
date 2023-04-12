@@ -24,7 +24,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public List<Area> getAll() {
         try {
-            return areaRepository.findAll();
+            return areaRepository.findByOrderByNombreAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public Page<Area> pagination(Pageable pageable) {
         try {
-            return areaRepository.findAll(pageable);
+            return areaRepository.paginationByOrderByNombreAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

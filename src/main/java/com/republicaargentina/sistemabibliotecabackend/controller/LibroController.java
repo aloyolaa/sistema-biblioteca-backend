@@ -48,4 +48,34 @@ public class LibroController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(libroService.delete(id), HttpStatus.OK);
     }
+
+    @GetMapping("/findByTitulo/{titulo}")
+    public ResponseEntity<List<Libro>> getAllByTitulo(@PathVariable String titulo) {
+        return new ResponseEntity<>(libroService.findByTituloContainsIgnoreCase(titulo), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByCodigo/{codigo}")
+    public ResponseEntity<List<Libro>> getAllByCodigo(@PathVariable String codigo) {
+        return new ResponseEntity<>(libroService.findByCodigoContainsIgnoreCaseOrderByCodigoAsc(codigo), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByAutor/{nombre}")
+    public ResponseEntity<Page<Libro>> getAllByAutor(@PathVariable String nombre, Pageable pageable) {
+        return new ResponseEntity<>(libroService.findByAutorNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByCategoria/{nombre}")
+    public ResponseEntity<Page<Libro>> getAllByCategoria(@PathVariable String nombre, Pageable pageable) {
+        return new ResponseEntity<>(libroService.findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByEditorial/{nombre}")
+    public ResponseEntity<Page<Libro>> getAllByEditorial(@PathVariable String nombre, Pageable pageable) {
+        return new ResponseEntity<>(libroService.findByEditorialNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByArea/{nombre}")
+    public ResponseEntity<Page<Libro>> getAllByArea(@PathVariable String nombre, Pageable pageable) {
+        return new ResponseEntity<>(libroService.findByAreaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable), HttpStatus.OK);
+    }
 }

@@ -24,7 +24,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public List<Categoria> getAll() {
         try {
-            return categoriaRepository.findAll();
+            return categoriaRepository.findByOrderByNombreAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Page<Categoria> pagination(Pageable pageable) {
         try {
-            return categoriaRepository.findAll(pageable);
+            return categoriaRepository.paginationByOrderByNombreAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

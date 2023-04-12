@@ -9,10 +9,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "libro", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_libro_titulo", columnNames = {"titulo"})
+@Table(name = "libro", indexes = {
+        @Index(name = "idx_libro_codigo", columnList = "codigo"),
+        @Index(name = "idx_libro_titulo", columnList = "titulo")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uc_libro_codigo", columnNames = {"codigo"})
 })
 public class Libro extends BaseEntity {
+    @Size(min = 4, message = "{Size.libro.codigo}")
+    @NotBlank(message = "{NotBlank.libro.codigo}")
+    @Column(name = "codigo", nullable = false)
+    private String codigo;
+
     @Size(min = 4, message = "{Size.libro.titulo}")
     @NotBlank(message = "{NotBlank.libro.titulo}")
     @Column(name = "titulo", nullable = false)
@@ -30,12 +38,10 @@ public class Libro extends BaseEntity {
     @Column(name = "grado", nullable = false)
     private Integer grado;
 
-    @Min(value = 1, message = "{Min.libro.cantidad}")
-    @NotNull(message = "{NotNull.libro.cantidad}")
-    @Column(name = "cantidad", nullable = false)
-    private Integer cantidad;
+    @Column(name = "estado", nullable = false)
+    private String estado;
 
-    @Column(name = "observaciones")
+    @Column(name = "observaciones", length = 1000)
     private String observaciones;
 
     @NotNull(message = "{NotNull.libro.autor}")
@@ -61,4 +67,9 @@ public class Libro extends BaseEntity {
     @JoinColumn(name = "area_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Area area;
+
+    @PrePersist
+    public void prePersist() {
+        this.estado = "DISPONIBLE";
+    }
 }

@@ -24,7 +24,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public List<Material> getAll() {
         try {
-            return materialRepository.findAll();
+            return materialRepository.findByOrderByNombreAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public Page<Material> pagination(Pageable pageable) {
         try {
-            return materialRepository.findAll(pageable);
+            return materialRepository.paginationByOrderByNombreAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -69,9 +69,8 @@ public class MaterialServiceImpl implements MaterialService {
         Material materialById = materialRepository.findById(material.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + material.getId()));
         try {
             materialById.setNombre(material.getNombre());
-            materialById.setLotes(material.getLotes());
-            materialById.setUnidades(material.getUnidades());
             materialById.setMedidas(material.getMedidas());
+            materialById.setCantidadInicial(material.getCantidadInicial());
             materialById.setObservaciones(material.getObservaciones());
             materialById.setArea(material.getArea());
             return materialRepository.save(materialById);
@@ -94,6 +93,26 @@ public class MaterialServiceImpl implements MaterialService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Material> findByNombreContainsIgnoreCaseOrderByNombreAsc(String nombre) {
+        try {
+            return materialRepository.findByNombreContainsIgnoreCaseOrderByNombreAsc(nombre);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Material> findByAreaNombreIgnoreCaseOrderByNombreAsc(String nombre, Pageable pageable) {
+        try {
+            return materialRepository.findByAreaNombreIgnoreCaseOrderByNombreAsc(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

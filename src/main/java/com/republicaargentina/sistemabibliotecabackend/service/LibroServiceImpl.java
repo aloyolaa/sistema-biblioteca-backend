@@ -24,7 +24,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public List<Libro> getAll() {
         try {
-            return libroRepository.findAll();
+            return libroRepository.findByOrderByCodigoAsc();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Page<Libro> pagination(Pageable pageable) {
         try {
-            return libroRepository.findAll(pageable);
+            return libroRepository.paginationByOrderByCodigoAsc(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -68,10 +68,10 @@ public class LibroServiceImpl implements LibroService {
         }
         Libro libroById = libroRepository.findById(libro.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + libro.getId()));
         try {
+            libroById.setCodigo(libro.getCodigo());
             libroById.setTitulo(libro.getTitulo());
             libroById.setAnio(libro.getAnio());
             libroById.setGrado(libro.getGrado());
-            libroById.setCantidad(libro.getCantidad());
             libroById.setObservaciones(libro.getObservaciones());
             libroById.setAutor(libro.getAutor());
             libroById.setCategoria(libro.getCategoria());
@@ -97,6 +97,65 @@ public class LibroServiceImpl implements LibroService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Libro> findByTituloContainsIgnoreCase(String titulo) {
+        try {
+            return libroRepository.findByTituloContainsIgnoreCaseOrderByCodigoAsc(titulo);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    public List<Libro> findByCodigoContainsIgnoreCaseOrderByCodigoAsc(String codigo) {
+        try {
+            return libroRepository.findByCodigoContainsIgnoreCaseOrderByCodigoAsc(codigo);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> findByAutorNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.findByAutorNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> findByEditorialNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.findByEditorialNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> findByAreaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.findByAreaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }
