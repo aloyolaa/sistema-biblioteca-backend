@@ -15,21 +15,21 @@ import lombok.Setter;
         @UniqueConstraint(name = "uc_docente_dni", columnNames = {"dni"})
 })
 public class Docente extends BaseEntity {
-    @Size(min = 4, message = "{}")
-    @NotBlank(message = "{}")
+    @Size(min = 4, message = "{Size.docente.nombre}")
+    @NotBlank(message = "{NotBlank.docente.nombre}")
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Size(min = 4, message = "{}")
-    @NotBlank(message = "{}")
+    @Size(min = 4, message = "{Size.docente.apellido}")
+    @NotBlank(message = "{NotBlank.docente.apellido}")
     @Column(name = "apellido", nullable = false)
     private String apellido;
 
-    @NotBlank(message = "{}")
+    @NotBlank(message = "{NotBlank.docente.dni}")
     @Column(name = "dni", nullable = false)
     private String dni;
 
-    @NotBlank(message = "{}")
+    @NotBlank(message = "{NotBlank.docente.telefono}")
     @Column(name = "telefono", nullable = false)
     private String telefono;
 }

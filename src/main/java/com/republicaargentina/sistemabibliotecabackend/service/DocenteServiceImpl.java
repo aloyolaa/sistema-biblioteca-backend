@@ -24,7 +24,7 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional(readOnly = true)
     public List<Docente> getAll() {
         try {
-            return docenteRepository.findByOrderByApellidoAscNombreAsc();
+            return docenteRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional(readOnly = true)
     public Page<Docente> pagination(Pageable pageable) {
         try {
-            return docenteRepository.paginationByOrderByApellidoAscNombreAsc(pageable);
+            return docenteRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -97,9 +97,19 @@ public class DocenteServiceImpl implements DocenteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Docente findByDni(String dni) {
+    public long count() {
         try {
-            return docenteRepository.findByDni(dni).orElseThrow(() -> new EntityNotFoundException("No existe con docente con el dni " + dni));
+            return docenteRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Docente getOneByDni(String dni) {
+        try {
+            return docenteRepository.getOneByDni(dni).orElseThrow(() -> new EntityNotFoundException("No existe con docente con el dni " + dni));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

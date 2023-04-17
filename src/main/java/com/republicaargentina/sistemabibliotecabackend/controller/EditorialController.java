@@ -29,7 +29,7 @@ public class EditorialController {
         return new ResponseEntity<>(editorialService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Editorial> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(editorialService.getOne(id), HttpStatus.OK);
     }
@@ -47,5 +47,10 @@ public class EditorialController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(editorialService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(editorialService.count(), HttpStatus.OK);
     }
 }

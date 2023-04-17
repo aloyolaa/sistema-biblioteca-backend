@@ -29,7 +29,7 @@ public class CategoriaController {
         return new ResponseEntity<>(categoriaService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Categoria> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(categoriaService.getOne(id), HttpStatus.OK);
     }
@@ -47,5 +47,10 @@ public class CategoriaController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(categoriaService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(categoriaService.count(), HttpStatus.OK);
     }
 }

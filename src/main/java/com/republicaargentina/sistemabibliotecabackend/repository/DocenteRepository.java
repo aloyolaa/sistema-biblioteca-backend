@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface DocenteRepository extends JpaRepository<Docente, Long> {
     @Query("select d from Docente d order by d.apellido, d.nombre")
-    List<Docente> findByOrderByApellidoAscNombreAsc();
+    List<Docente> getAll();
 
     @Query("select d from Docente d order by d.apellido, d.nombre")
-    Page<Docente> paginationByOrderByApellidoAscNombreAsc(Pageable pageable);
+    Page<Docente> pagination(Pageable pageable);
 
     @Query("select d from Docente d where d.dni = ?1")
-    Optional<Docente> findByDni(String dni);
+    Optional<Docente> getOneByDni(String dni);
 }

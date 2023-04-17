@@ -13,41 +13,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     private final PrestamoLibroRepository prestamoLibroRepository;
+    private final EjemplarService ejemplarService;
     private static final String MESSAGE = "No existe un préstamo con el ID ";
 
-    private void updateEstados() {
-        prestamoLibroRepository.findAll()
-                .forEach(p -> {
-                    if (p.getFechaDevolucion() == null && LocalDateTime.now().isAfter(p.getFechaLimite())) {
-                        p.setEstado("ATRASADO");
-                        prestamoLibroRepository.save(p);
-                    }
-                });
-    }
-
     @Override
-    @Transactional(readOnly = true)
-    public List<PrestamoLibro> findByOrderByFechaPrestamoDesc() {
+    @Transactional
+    public List<PrestamoLibro> getAll() {
         try {
-            updateEstados();
-            return prestamoLibroRepository.findByOrderByFechaPrestamoDesc();
+            cambiarEstados();
+            return prestamoLibroRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Page<PrestamoLibro> paginationByOrderByFechaPrestamoDesc(Pageable pageable) {
+    @Transactional
+    public Page<PrestamoLibro> pagination(Pageable pageable) {
         try {
-            updateEstados();
-            return prestamoLibroRepository.paginationByOrderByFechaPrestamoDesc(pageable);
+            cambiarEstados();
+            return prestamoLibroRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -67,28 +59,11 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     @Transactional
     public PrestamoLibro save(PrestamoLibro prestamoLibro) {
         try {
-            //TODO Manejar el cambio de estado del libro a "PRESTADO"
+            prestamoLibro.getDetalle()
+                    .forEach(d -> ejemplarService.cambiarEstadoAPrestado(d.getEjemplar().getId()));
             return prestamoLibroRepository.save(prestamoLibro);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
-        }
-    }
-
-    @Override
-    public PrestamoLibro update(PrestamoLibro prestamoLibro) {
-        PrestamoLibro prestamoLibroById = prestamoLibroRepository.findById(prestamoLibro.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + prestamoLibro.getId()));
-        try {
-            prestamoLibroById.setFechaPrestamo(prestamoLibro.getFechaPrestamo());
-            prestamoLibroById.setFechaLimite(prestamoLibro.getFechaLimite());
-            prestamoLibroById.setFechaDevolucion(prestamoLibro.getFechaDevolucion());
-            prestamoLibroById.setGrado(prestamoLibro.getGrado());
-            prestamoLibroById.setSeccion(prestamoLibro.getSeccion());
-            prestamoLibroById.setObservaciones(prestamoLibro.getObservaciones());
-            prestamoLibroById.setDocente(prestamoLibro.getDocente());
-            prestamoLibroById.setDetalle(prestamoLibro.getDetalle());
-            return prestamoLibroRepository.save(prestamoLibroById);
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
     }
 
@@ -102,10 +77,22 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
             if (!prestamoLibroRepository.existsById(id)) {
                 throw new EntityNotFoundException(MESSAGE + id);
             }
+            PrestamoLibro prestamoLibro = prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            prestamoLibro.getDetalle().forEach(d -> d.getEjemplar().setEstado("DISPONIBLE"));
             prestamoLibroRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return prestamoLibroRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 
@@ -121,9 +108,39 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
                 prestamoLibro.setEstado("DEVUELTO");
             }
             prestamoLibro.setObservaciones(prestamoLibro.getObservaciones());
+            prestamoLibro.getDetalle()
+                    .forEach(d -> ejemplarService.cambiarEstadoADisponible(d.getEjemplar().getId()));
             return prestamoLibroRepository.save(prestamoLibro);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cambiarEstados() {
+        prestamoLibroRepository.findAll()
+                .forEach(p -> {
+                    if (p.getFechaDevolucion() == null && LocalDateTime.now().isAfter(p.getFechaLimite())) {
+                        p.setEstado("ATRASADO");
+                        prestamoLibroRepository.save(p);
+                    }
+                });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoLibro> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException("Ambas fechas son requeridas para el filtro");
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        try {
+            return prestamoLibroRepository.paginationByFechaPrestamo(fechaPrestamoStart, fechaPrestamoEnd, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

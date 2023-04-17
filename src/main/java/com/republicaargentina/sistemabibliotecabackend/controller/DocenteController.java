@@ -29,7 +29,7 @@ public class DocenteController {
         return new ResponseEntity<>(docenteService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Docente> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(docenteService.getOne(id), HttpStatus.OK);
     }
@@ -49,8 +49,13 @@ public class DocenteController {
         return new ResponseEntity<>(docenteService.delete(id), HttpStatus.OK);
     }
 
-    @GetMapping("/findByDni/{dni}")
-    public ResponseEntity<Docente> getOne(@PathVariable String dni) {
-        return new ResponseEntity<>(docenteService.findByDni(dni), HttpStatus.OK);
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(docenteService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getOneByDni/{dni}")
+    public ResponseEntity<Docente> getOneByDni(@PathVariable String dni) {
+        return new ResponseEntity<>(docenteService.getOneByDni(dni), HttpStatus.OK);
     }
 }

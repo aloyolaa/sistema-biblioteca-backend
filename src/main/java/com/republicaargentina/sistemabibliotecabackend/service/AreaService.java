@@ -18,4 +18,6 @@ public interface AreaService {
     Area update(Area area);
 
     Boolean delete(Long id);
+
+    long count();
 }

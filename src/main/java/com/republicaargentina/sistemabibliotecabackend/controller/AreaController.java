@@ -29,7 +29,7 @@ public class AreaController {
         return new ResponseEntity<>(areaService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Area> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(areaService.getOne(id), HttpStatus.OK);
     }
@@ -47,5 +47,10 @@ public class AreaController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(areaService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(areaService.count(), HttpStatus.OK);
     }
 }

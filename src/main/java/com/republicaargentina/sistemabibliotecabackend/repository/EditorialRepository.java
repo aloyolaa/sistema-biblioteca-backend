@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface EditorialRepository extends JpaRepository<Editorial, Long> {
     @Query("select e from Editorial e order by e.nombre")
-    List<Editorial> findByOrderByNombreAsc();
+    List<Editorial> getAll();
 
     @Query("select e from Editorial e order by e.nombre")
-    Page<Editorial> paginationByOrderByNombreAsc(Pageable pageable);
+    Page<Editorial> pagination(Pageable pageable);
 }

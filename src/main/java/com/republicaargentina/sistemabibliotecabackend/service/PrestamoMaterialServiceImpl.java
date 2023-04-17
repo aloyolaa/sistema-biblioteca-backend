@@ -22,20 +22,22 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     private static final String MESSAGE = "No existe un préstamo con el ID ";
 
     @Override
-    @Transactional(readOnly = true)
-    public List<PrestamoMaterial> findByOrderByFechaPrestamoDesc() {
+    @Transactional
+    public List<PrestamoMaterial> getAll() {
         try {
-            return prestamoMaterialRepository.findByOrderByFechaPrestamoDesc();
+            cambiarEstados();
+            return prestamoMaterialRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByOrderByFechaPrestamoDesc(Pageable pageable) {
+    @Transactional
+    public Page<PrestamoMaterial> pagination(Pageable pageable) {
         try {
-            return prestamoMaterialRepository.paginationByOrderByFechaPrestamoDesc(pageable);
+            cambiarEstados();
+            return prestamoMaterialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -61,24 +63,6 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     }
 
     @Override
-    public PrestamoMaterial update(PrestamoMaterial prestamoMaterial) {
-        PrestamoMaterial prestamoMaterialById = prestamoMaterialRepository.findById(prestamoMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + prestamoMaterial.getId()));
-        try {
-            prestamoMaterialById.setFechaPrestamo(prestamoMaterial.getFechaPrestamo());
-            prestamoMaterialById.setFechaLimite(prestamoMaterial.getFechaLimite());
-            prestamoMaterialById.setFechaDevolucion(prestamoMaterial.getFechaDevolucion());
-            prestamoMaterialById.setGrado(prestamoMaterial.getGrado());
-            prestamoMaterialById.setSeccion(prestamoMaterial.getSeccion());
-            prestamoMaterialById.setObservaciones(prestamoMaterial.getObservaciones());
-            prestamoMaterialById.setDocente(prestamoMaterial.getDocente());
-            prestamoMaterialById.setDetalle(prestamoMaterial.getDetalle());
-            return prestamoMaterialRepository.save(prestamoMaterialById);
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
-        }
-    }
-
-    @Override
     @Transactional
     public Boolean delete(Long id) {
         if (id == null) {
@@ -92,6 +76,16 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return prestamoMaterialRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 
@@ -111,5 +105,17 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
+    }
+
+    @Override
+    @Transactional
+    public void cambiarEstados() {
+        prestamoMaterialRepository.findAll()
+                .forEach(p -> {
+                    if (p.getFechaDevolucion() == null && LocalDateTime.now().isAfter(p.getFechaLimite())) {
+                        p.setEstado("ATRASADO");
+                        prestamoMaterialRepository.save(p);
+                    }
+                });
     }
 }

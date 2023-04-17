@@ -38,9 +38,6 @@ public class Libro extends BaseEntity {
     @Column(name = "grado", nullable = false)
     private Integer grado;
 
-    @Column(name = "estado", nullable = false)
-    private String estado;
-
     @Column(name = "observaciones", length = 1000)
     private String observaciones;
 
@@ -67,9 +64,4 @@ public class Libro extends BaseEntity {
     @JoinColumn(name = "area_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Area area;
-
-    @PrePersist
-    public void prePersist() {
-        this.estado = "DISPONIBLE";
-    }
 }

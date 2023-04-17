@@ -24,7 +24,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public List<Material> getAll() {
         try {
-            return materialRepository.findByOrderByNombreAsc();
+            return materialRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public Page<Material> pagination(Pageable pageable) {
         try {
-            return materialRepository.paginationByOrderByNombreAsc(pageable);
+            return materialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -98,9 +98,9 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Material> findByNombreContainsIgnoreCaseOrderByNombreAsc(String nombre) {
+    public long count() {
         try {
-            return materialRepository.findByNombreContainsIgnoreCaseOrderByNombreAsc(nombre);
+            return materialRepository.count();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -108,9 +108,19 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Material> findByAreaNombreIgnoreCaseOrderByNombreAsc(String nombre, Pageable pageable) {
+    public List<Material> getAllByNombre(String nombre) {
         try {
-            return materialRepository.findByAreaNombreIgnoreCaseOrderByNombreAsc(nombre, pageable);
+            return materialRepository.getAllByNombre(nombre);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Material> paginationByArea(String nombre, Pageable pageable) {
+        try {
+            return materialRepository.paginationByArea(nombre, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

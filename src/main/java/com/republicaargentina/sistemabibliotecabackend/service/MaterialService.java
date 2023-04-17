@@ -19,7 +19,9 @@ public interface MaterialService {
 
     Boolean delete(Long id);
 
-    List<Material> findByNombreContainsIgnoreCaseOrderByNombreAsc(String nombre);
+    long count();
 
-    Page<Material> findByAreaNombreIgnoreCaseOrderByNombreAsc(String nombre, Pageable pageable);
+    List<Material> getAllByNombre(String nombre);
+
+    Page<Material> paginationByArea(String nombre, Pageable pageable);
 }

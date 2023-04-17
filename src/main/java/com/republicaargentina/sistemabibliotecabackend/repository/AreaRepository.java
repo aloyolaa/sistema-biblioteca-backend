@@ -10,10 +10,8 @@ import java.util.List;
 
 public interface AreaRepository extends JpaRepository<Area, Long> {
     @Query("select a from Area a order by a.nombre")
-    List<Area> findByOrderByNombreAsc();
+    List<Area> getAll();
 
     @Query("select a from Area a order by a.nombre")
-    Page<Area> paginationByOrderByNombreAsc(Pageable pageable);
-
-
+    Page<Area> pagination(Pageable pageable);
 }

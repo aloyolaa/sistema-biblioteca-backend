@@ -22,12 +22,17 @@ public class PrestamoLibroController {
 
     @GetMapping("/")
     public ResponseEntity<List<PrestamoLibro>> getAll() {
-        return new ResponseEntity<>(prestamoLibroService.findByOrderByFechaPrestamoDesc(), HttpStatus.OK);
+        return new ResponseEntity<>(prestamoLibroService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/pagination")
     public ResponseEntity<Page<PrestamoLibro>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByOrderByFechaPrestamoDesc(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(prestamoLibroService.pagination(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<PrestamoLibro> getOne(@PathVariable Long id) {
+        return new ResponseEntity<>(prestamoLibroService.getOne(id), HttpStatus.OK);
     }
 
     @PostMapping("/save")
@@ -40,8 +45,18 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.delete(id), HttpStatus.OK);
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(prestamoLibroService.count(), HttpStatus.OK);
+    }
+
     @GetMapping("/close/{id}")
     public ResponseEntity<PrestamoLibro> close(@PathVariable Long id) {
         return new ResponseEntity<>(prestamoLibroService.close(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
     }
 }

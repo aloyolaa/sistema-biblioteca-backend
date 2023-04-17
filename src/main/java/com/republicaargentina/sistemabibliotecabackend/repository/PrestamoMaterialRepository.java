@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMaterial, Long> {
     @Query("select p from PrestamoMaterial p order by p.fechaPrestamo DESC")
-    List<PrestamoMaterial> findByOrderByFechaPrestamoDesc();
+    List<PrestamoMaterial> getAll();
 
     @Query("select p from PrestamoMaterial p order by p.fechaPrestamo DESC")
-    Page<PrestamoMaterial> paginationByOrderByFechaPrestamoDesc(Pageable pageable);
+    Page<PrestamoMaterial> pagination(Pageable pageable);
 }

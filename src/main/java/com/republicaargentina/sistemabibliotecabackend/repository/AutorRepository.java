@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface AutorRepository extends JpaRepository<Autor, Long> {
     @Query("select a from Autor a order by a.nombre")
-    List<Autor> findByOrderByNombreAsc();
+    List<Autor> getAll();
 
     @Query("select a from Autor a order by a.nombre")
-    Page<Autor> paginationByOrderByNombreAsc(Pageable pageable);
+    Page<Autor> pagination(Pageable pageable);
 }

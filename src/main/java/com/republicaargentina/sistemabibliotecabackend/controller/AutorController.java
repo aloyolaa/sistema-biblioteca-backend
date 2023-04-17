@@ -29,7 +29,7 @@ public class AutorController {
         return new ResponseEntity<>(autorService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Autor> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(autorService.getOne(id), HttpStatus.OK);
     }
@@ -47,5 +47,10 @@ public class AutorController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(autorService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(autorService.count(), HttpStatus.OK);
     }
 }

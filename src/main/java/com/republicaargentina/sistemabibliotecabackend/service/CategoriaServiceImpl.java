@@ -24,7 +24,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public List<Categoria> getAll() {
         try {
-            return categoriaRepository.findByOrderByNombreAsc();
+            return categoriaRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Page<Categoria> pagination(Pageable pageable) {
         try {
-            return categoriaRepository.paginationByOrderByNombreAsc(pageable);
+            return categoriaRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -89,6 +89,16 @@ public class CategoriaServiceImpl implements CategoriaService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return categoriaRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

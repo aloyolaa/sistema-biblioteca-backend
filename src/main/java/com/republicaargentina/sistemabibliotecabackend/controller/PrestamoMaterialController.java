@@ -15,19 +15,24 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/prestamos-libros")
+@RequestMapping("/api/v1/prestamos-materiales")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PrestamoMaterialController {
     private final PrestamoMaterialService prestamoMaterialService;
 
     @GetMapping("/")
     public ResponseEntity<List<PrestamoMaterial>> getAll() {
-        return new ResponseEntity<>(prestamoMaterialService.findByOrderByFechaPrestamoDesc(), HttpStatus.OK);
+        return new ResponseEntity<>(prestamoMaterialService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/pagination")
     public ResponseEntity<Page<PrestamoMaterial>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByOrderByFechaPrestamoDesc(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(prestamoMaterialService.pagination(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<PrestamoMaterial> getOne(@PathVariable Long id) {
+        return new ResponseEntity<>(prestamoMaterialService.getOne(id), HttpStatus.OK);
     }
 
     @PostMapping("/save")
@@ -38,5 +43,15 @@ public class PrestamoMaterialController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(prestamoMaterialService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(prestamoMaterialService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/close/{id}")
+    public ResponseEntity<PrestamoMaterial> close(@PathVariable Long id) {
+        return new ResponseEntity<>(prestamoMaterialService.close(id), HttpStatus.OK);
     }
 }

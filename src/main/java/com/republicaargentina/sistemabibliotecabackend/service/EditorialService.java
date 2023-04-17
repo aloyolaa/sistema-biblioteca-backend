@@ -18,4 +18,6 @@ public interface EditorialService {
     Editorial update(Editorial editorial);
 
     Boolean delete(Long id);
+
+    long count();
 }

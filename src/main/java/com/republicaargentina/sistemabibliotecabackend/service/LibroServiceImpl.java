@@ -24,7 +24,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public List<Libro> getAll() {
         try {
-            return libroRepository.findByOrderByCodigoAsc();
+            return libroRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Page<Libro> pagination(Pageable pageable) {
         try {
-            return libroRepository.paginationByOrderByCodigoAsc(pageable);
+            return libroRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -102,18 +102,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Libro> findByTituloContainsIgnoreCase(String titulo) {
+    public long count() {
         try {
-            return libroRepository.findByTituloContainsIgnoreCaseOrderByCodigoAsc(titulo);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    public List<Libro> findByCodigoContainsIgnoreCaseOrderByCodigoAsc(String codigo) {
-        try {
-            return libroRepository.findByCodigoContainsIgnoreCaseOrderByCodigoAsc(codigo);
+            return libroRepository.count();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -121,9 +112,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> findByAutorNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+    public Libro getOneByTitulo(String titulo) {
         try {
-            return libroRepository.findByAutorNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+            return libroRepository.getOneByTitulo(titulo).orElseThrow(() -> new EntityNotFoundException("No existe un libro con el título " + titulo));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -131,9 +122,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+    public Libro getOneByCodigo(String codigo) {
         try {
-            return libroRepository.findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+            return libroRepository.getOneByCodigo(codigo).orElseThrow(() -> new EntityNotFoundException("No existe un libro con el código " + codigo));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -141,9 +132,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> findByEditorialNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+    public List<Libro> getAllByTitulo(String titulo) {
         try {
-            return libroRepository.findByEditorialNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+            return libroRepository.getAllByTitulo(titulo);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -151,9 +142,49 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> findByAreaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable) {
+    public List<Libro> getAllByCodigo(String codigo) {
         try {
-            return libroRepository.findByAreaNombreIgnoreCaseOrderByCodigoAsc(nombre, pageable);
+            return libroRepository.getAllByCodigo(codigo);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> paginationByAutor(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.paginationByAutor(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> paginationByCategoria(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.paginationByCategoria(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> paginationByEditorial(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.paginationByEditorial(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> paginationByArea(String nombre, Pageable pageable) {
+        try {
+            return libroRepository.paginationByArea(nombre, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

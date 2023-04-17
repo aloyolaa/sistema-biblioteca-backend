@@ -1,6 +1,6 @@
 package com.republicaargentina.sistemabibliotecabackend.service;
 
-import com.republicaargentina.sistemabibliotecabackend.entity.Autor;
+import  com.republicaargentina.sistemabibliotecabackend.entity.Autor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +18,6 @@ public interface AutorService {
     Autor update(Autor autor);
 
     Boolean delete(Long id);
+
+    long count();
 }

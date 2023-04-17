@@ -24,7 +24,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public List<Area> getAll() {
         try {
-            return areaRepository.findByOrderByNombreAsc();
+            return areaRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public Page<Area> pagination(Pageable pageable) {
         try {
-            return areaRepository.paginationByOrderByNombreAsc(pageable);
+            return areaRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -89,6 +89,16 @@ public class AreaServiceImpl implements AreaService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return areaRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

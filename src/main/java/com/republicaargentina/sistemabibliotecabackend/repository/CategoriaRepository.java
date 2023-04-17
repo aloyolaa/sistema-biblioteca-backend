@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     @Query("select c from Categoria c order by c.nombre")
-    List<Categoria> findByOrderByNombreAsc();
+    List<Categoria> getAll();
 
     @Query("select c from Categoria c order by c.nombre")
-    Page<Categoria> paginationByOrderByNombreAsc(Pageable pageable);
+    Page<Categoria> pagination(Pageable pageable);
 }

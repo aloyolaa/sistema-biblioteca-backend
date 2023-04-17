@@ -19,15 +19,21 @@ public interface LibroService {
 
     Boolean delete(Long id);
 
-    List<Libro> findByTituloContainsIgnoreCase(String titulo);
+    long count();
 
-    List<Libro> findByCodigoContainsIgnoreCaseOrderByCodigoAsc(String codigo);
+    Libro getOneByTitulo(String titulo);
 
-    Page<Libro> findByAutorNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable);
+    Libro getOneByCodigo(String codigo);
 
-    Page<Libro> findByCategoriaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable);
+    List<Libro> getAllByTitulo(String titulo);
 
-    Page<Libro> findByEditorialNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable);
+    List<Libro> getAllByCodigo(String codigo);
 
-    Page<Libro> findByAreaNombreIgnoreCaseOrderByCodigoAsc(String nombre, Pageable pageable);
+    Page<Libro> paginationByAutor(String nombre, Pageable pageable);
+
+    Page<Libro> paginationByCategoria(String nombre, Pageable pageable);
+
+    Page<Libro> paginationByEditorial(String nombre, Pageable pageable);
+
+    Page<Libro> paginationByArea(String nombre, Pageable pageable);
 }

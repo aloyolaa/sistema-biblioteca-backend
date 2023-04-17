@@ -24,7 +24,7 @@ public class AutorServiceImpl implements AutorService {
     @Transactional(readOnly = true)
     public List<Autor> getAll() {
         try {
-            return autorRepository.findByOrderByNombreAsc();
+            return autorRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class AutorServiceImpl implements AutorService {
     @Transactional(readOnly = true)
     public Page<Autor> pagination(Pageable pageable) {
         try {
-            return autorRepository.paginationByOrderByNombreAsc(pageable);
+            return autorRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -89,6 +89,16 @@ public class AutorServiceImpl implements AutorService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return autorRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }

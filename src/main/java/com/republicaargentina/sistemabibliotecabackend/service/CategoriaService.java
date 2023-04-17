@@ -18,4 +18,6 @@ public interface CategoriaService {
     Categoria update(Categoria categoriaLibro);
 
     Boolean delete(Long id);
+
+    long count();
 }

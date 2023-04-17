@@ -7,17 +7,19 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PrestamoMaterialService {
-    List<PrestamoMaterial> findByOrderByFechaPrestamoDesc();
+    List<PrestamoMaterial> getAll();
 
-    Page<PrestamoMaterial> paginationByOrderByFechaPrestamoDesc(Pageable pageable);
+    Page<PrestamoMaterial> pagination(Pageable pageable);
 
     PrestamoMaterial getOne(Long id);
 
     PrestamoMaterial save(PrestamoMaterial prestamoMaterial);
 
-    PrestamoMaterial update(PrestamoMaterial prestamoMaterial);
-
     Boolean delete(Long id);
 
+    long count();
+
     PrestamoMaterial close(Long id);
+
+    void cambiarEstados();
 }

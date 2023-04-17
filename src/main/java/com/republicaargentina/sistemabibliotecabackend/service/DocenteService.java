@@ -19,5 +19,7 @@ public interface DocenteService {
 
     Boolean delete(Long id);
 
-    Docente findByDni(String dni);
+    long count();
+
+    Docente getOneByDni(String dni);
 }

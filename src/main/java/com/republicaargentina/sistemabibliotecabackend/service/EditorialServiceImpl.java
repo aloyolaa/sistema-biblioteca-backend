@@ -24,7 +24,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public List<Editorial> getAll() {
         try {
-            return editorialRepository.findByOrderByNombreAsc();
+            return editorialRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -34,7 +34,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public Page<Editorial> pagination(Pageable pageable) {
         try {
-            return editorialRepository.paginationByOrderByNombreAsc(pageable);
+            return editorialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -89,6 +89,16 @@ public class EditorialServiceImpl implements EditorialService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long count() {
+        try {
+            return editorialRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }
