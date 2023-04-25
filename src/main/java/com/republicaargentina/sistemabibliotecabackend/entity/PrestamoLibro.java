@@ -19,13 +19,8 @@ public class PrestamoLibro extends BaseEntity {
     @Column(name = "fecha_prestamo")
     private LocalDateTime fechaPrestamo;
 
-    @NotNull(message = "{NotNull.prestamoLibro.fechaLimite}")
-    @Column(name = "fecha_limite", nullable = false)
-    private LocalDateTime fechaLimite;
-
     @Column(name = "fecha_devolucion")
     private LocalDateTime fechaDevolucion;
-
 
     @NotBlank(message = "{NotBlank.prestamoLibro.descripcion}")
     @Column(name = "descripcion", nullable = false)

@@ -21,7 +21,15 @@ public interface MaterialService {
 
     long count();
 
+    Material getOneByNombre(String nombre);
+
+    Material getOneByCodigo(String codigo);
+
     List<Material> getAllByNombre(String nombre);
 
+    List<Material> getAllByCodigo(String codigo);
+
     Page<Material> paginationByArea(String nombre, Pageable pageable);
+
+    Material cambiarLetras(Material material);
 }

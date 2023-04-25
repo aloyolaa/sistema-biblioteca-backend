@@ -36,4 +36,6 @@ public interface LibroService {
     Page<Libro> paginationByEditorial(String nombre, Pageable pageable);
 
     Page<Libro> paginationByArea(String nombre, Pageable pageable);
+
+    Libro cambiarLetras(Libro libro);
 }

@@ -19,9 +19,9 @@ public interface PrestamoLibroService {
 
     long count();
 
-    PrestamoLibro close(Long id);
-
-    void cambiarEstados();
+    PrestamoLibro close(PrestamoLibro prestamoLibro);
 
     Page<PrestamoLibro> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable);
+
+    PrestamoLibro cambiarLetras(PrestamoLibro prestamoLibro);
 }

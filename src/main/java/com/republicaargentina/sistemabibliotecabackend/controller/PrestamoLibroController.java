@@ -50,9 +50,9 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/close/{id}")
-    public ResponseEntity<PrestamoLibro> close(@PathVariable Long id) {
-        return new ResponseEntity<>(prestamoLibroService.close(id), HttpStatus.OK);
+    @GetMapping("/close")
+    public ResponseEntity<PrestamoLibro> close(@RequestBody PrestamoLibro prestamoLibro) {
+        return new ResponseEntity<>(prestamoLibroService.close(prestamoLibro), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")

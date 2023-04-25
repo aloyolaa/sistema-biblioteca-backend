@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AreaServiceImpl implements AreaService {
     private final AreaRepository areaRepository;
-    private static final String MESSAGE = "No existe un area con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un area con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public Area getOne(Long id) {
         try {
-            return areaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return areaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class AreaServiceImpl implements AreaService {
     @Transactional
     public Area save(Area area) {
         try {
-            return areaRepository.save(area);
+            return areaRepository.save(cambiarLetras(area));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,10 +66,10 @@ public class AreaServiceImpl implements AreaService {
         if (area.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Area areaById = areaRepository.findById(area.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + area.getId()));
+        Area areaById = areaRepository.findById(area.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + area.getId()));
         try {
             areaById.setNombre(area.getNombre());
-            return areaRepository.save(areaById);
+            return areaRepository.save(cambiarLetras(areaById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -83,7 +83,7 @@ public class AreaServiceImpl implements AreaService {
         }
         try {
             if (!areaRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             areaRepository.deleteById(id);
             return true;
@@ -100,5 +100,11 @@ public class AreaServiceImpl implements AreaService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Area cambiarLetras(Area area) {
+        area.setNombre(area.getNombre().toUpperCase());
+        return area;
     }
 }

@@ -19,7 +19,9 @@ public interface PrestamoMaterialService {
 
     long count();
 
-    PrestamoMaterial close(Long id);
+    PrestamoMaterial close(PrestamoMaterial prestamoMaterial);
 
-    void cambiarEstados();
+    Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable);
+
+    PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial);
 }

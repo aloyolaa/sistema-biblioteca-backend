@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EditorialServiceImpl implements EditorialService {
     private final EditorialRepository editorialRepository;
-    private static final String MESSAGE = "No existe una editorial con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe una editorial con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public Editorial getOne(Long id) {
         try {
-            return editorialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return editorialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional
     public Editorial save(Editorial editorial) {
         try {
-            return editorialRepository.save(editorial);
+            return editorialRepository.save(cambiarLetras(editorial));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,10 +66,10 @@ public class EditorialServiceImpl implements EditorialService {
         if (editorial.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Editorial editorialById = editorialRepository.findById(editorial.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + editorial.getId()));
+        Editorial editorialById = editorialRepository.findById(editorial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + editorial.getId()));
         try {
             editorialById.setNombre(editorial.getNombre());
-            return editorialRepository.save(editorialById);
+            return editorialRepository.save(cambiarLetras(editorialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -83,7 +83,7 @@ public class EditorialServiceImpl implements EditorialService {
         }
         try {
             if (!editorialRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             editorialRepository.deleteById(id);
             return true;
@@ -100,5 +100,11 @@ public class EditorialServiceImpl implements EditorialService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Editorial cambiarLetras(Editorial editorial) {
+        editorial.setNombre(editorial.getNombre().toUpperCase());
+        return editorial;
     }
 }

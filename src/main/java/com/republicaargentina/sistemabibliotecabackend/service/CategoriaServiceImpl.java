@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoriaServiceImpl implements CategoriaService {
     private final CategoriaRepository categoriaRepository;
-    private static final String MESSAGE = "No existe una categoria con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe una categoria con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Categoria getOne(Long id) {
         try {
-            return categoriaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return categoriaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional
     public Categoria save(Categoria categoria) {
         try {
-            return categoriaRepository.save(categoria);
+            return categoriaRepository.save(cambiarLetras(categoria));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,10 +66,10 @@ public class CategoriaServiceImpl implements CategoriaService {
         if (categoria.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Categoria categoriaById = categoriaRepository.findById(categoria.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + categoria.getId()));
+        Categoria categoriaById = categoriaRepository.findById(categoria.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + categoria.getId()));
         try {
             categoriaById.setNombre(categoria.getNombre());
-            return categoriaRepository.save(categoriaById);
+            return categoriaRepository.save(cambiarLetras(categoriaById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -83,7 +83,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
         try {
             if (!categoriaRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             categoriaRepository.deleteById(id);
             return true;
@@ -100,5 +100,11 @@ public class CategoriaServiceImpl implements CategoriaService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Categoria cambiarLetras(Categoria categoria) {
+        categoria.setNombre(categoria.getNombre().toUpperCase());
+        return categoria;
     }
 }

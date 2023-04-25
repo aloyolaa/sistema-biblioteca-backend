@@ -38,14 +38,11 @@ public class Libro extends BaseEntity {
     @Column(name = "grado", nullable = false)
     private Integer grado;
 
-    @Column(name = "observaciones", length = 1000)
-    private String observaciones;
-
-    @NotNull(message = "{NotNull.libro.autor}")
+    @NotNull(message = "{NotNull.libro.area}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "autor_id", nullable = false)
+    @JoinColumn(name = "area_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Autor autor;
+    private Area area;
 
     @NotNull(message = "{NotNull.libro.categoria}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -59,9 +56,9 @@ public class Libro extends BaseEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Editorial editorial;
 
-    @NotNull(message = "{NotNull.libro.area}")
+    @NotNull(message = "{NotNull.libro.autor}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "area_id", nullable = false)
+    @JoinColumn(name = "autor_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Area area;
+    private Autor autor;
 }

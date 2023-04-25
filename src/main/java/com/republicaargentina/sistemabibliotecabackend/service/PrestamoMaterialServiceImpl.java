@@ -13,19 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     private final PrestamoMaterialRepository prestamoMaterialRepository;
-    private static final String MESSAGE = "No existe un préstamo con el ID ";
+    private final EjemplarMaterialService ejemplarMaterialService;
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de materiales con el ID ";
 
     @Override
     @Transactional
     public List<PrestamoMaterial> getAll() {
         try {
-            cambiarEstados();
             return prestamoMaterialRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
@@ -36,7 +37,6 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional
     public Page<PrestamoMaterial> pagination(Pageable pageable) {
         try {
-            cambiarEstados();
             return prestamoMaterialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
@@ -46,7 +46,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Override
     public PrestamoMaterial getOne(Long id) {
         try {
-            return prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +56,9 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional
     public PrestamoMaterial save(PrestamoMaterial prestamoMaterial) {
         try {
-            return prestamoMaterialRepository.save(prestamoMaterial);
+            prestamoMaterial.getDetalle()
+                    .forEach(d -> ejemplarMaterialService.cambiarEstadoAPrestado(d.getEjemplarMaterial().getId()));
+            return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterial));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -70,8 +72,11 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         }
         try {
             if (!prestamoMaterialRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
+            PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            prestamoMaterial.getDetalle()
+                    .forEach(d -> ejemplarMaterialService.cambiarEstadoADisponible(d.getEjemplarMaterial().getId()));
             prestamoMaterialRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -91,31 +96,42 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional
-    public PrestamoMaterial close(Long id) {
-        PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+    public PrestamoMaterial close(PrestamoMaterial prestamoMaterial) {
+        if (prestamoMaterial.getId() == null) {
+            throw new IllegalArgumentException("El identificador de necesario para la eliminación.");
+        }
+        PrestamoMaterial prestamoMaterialById = prestamoMaterialRepository.findById(prestamoMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoMaterial.getId()));
         try {
-            prestamoMaterial.setFechaDevolucion(LocalDateTime.now());
-            if (prestamoMaterial.getFechaDevolucion().isAfter(prestamoMaterial.getFechaLimite())) {
-                prestamoMaterial.setEstado("DEVUELTO CON TARDANZA");
-            } else {
-                prestamoMaterial.setEstado("DEVUELTO");
-            }
-            prestamoMaterial.setObservaciones(prestamoMaterial.getObservaciones());
-            return prestamoMaterialRepository.save(prestamoMaterial);
+            prestamoMaterialById.setFechaDevolucion(LocalDateTime.now());
+            prestamoMaterialById.setEstado("DEVUELTO");
+            prestamoMaterialById.setObservaciones(prestamoMaterial.getObservaciones());
+            prestamoMaterialById.getDetalle()
+                    .forEach(d -> ejemplarMaterialService.cambiarEstadoADisponible(d.getEjemplarMaterial().getId()));
+            return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
     }
 
     @Override
-    @Transactional
-    public void cambiarEstados() {
-        prestamoMaterialRepository.findAll()
-                .forEach(p -> {
-                    if (p.getFechaDevolucion() == null && LocalDateTime.now().isAfter(p.getFechaLimite())) {
-                        p.setEstado("ATRASADO");
-                        prestamoMaterialRepository.save(p);
-                    }
-                });
+    public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException("Ambas fechas son requeridas para el filtro");
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        try {
+            return prestamoMaterialRepository.paginationByFechaPrestamo(fechaPrestamoStart, fechaPrestamoEnd, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    public PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial) {
+        prestamoMaterial.setDescripcion(prestamoMaterial.getDescripcion().toUpperCase());
+        prestamoMaterial.setObservaciones(prestamoMaterial.getObservaciones().toUpperCase());
+        return prestamoMaterial;
     }
 }

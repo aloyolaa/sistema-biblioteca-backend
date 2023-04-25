@@ -54,13 +54,28 @@ public class MaterialController {
         return new ResponseEntity<>(materialService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllByNombre/{titulo}")
+    @GetMapping("/getOneByNombre/{nombre}")
+    public ResponseEntity<Material> getOneByNombre(@PathVariable String nombre) {
+        return new ResponseEntity<>(materialService.getOneByNombre(nombre), HttpStatus.OK);
+    }
+
+    @GetMapping("/getOneByCodigo/{codigo}")
+    public ResponseEntity<Material> getOneByCodigo(@PathVariable String codigo) {
+        return new ResponseEntity<>(materialService.getOneByCodigo(codigo), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllByNombre/{nombre}")
     public ResponseEntity<List<Material>> getAllByNombre(@PathVariable String nombre) {
         return new ResponseEntity<>(materialService.getAllByNombre(nombre), HttpStatus.OK);
     }
 
+    @GetMapping("/getAllByCodigo/{codigo}")
+    public ResponseEntity<List<Material>> getAllByCodigo(@PathVariable String codigo) {
+        return new ResponseEntity<>(materialService.getAllByCodigo(codigo), HttpStatus.OK);
+    }
+
     @GetMapping("/paginationByArea/{nombre}")
-    public ResponseEntity<Page<Material>> getAllByArea(@PathVariable String nombre, Pageable pageable) {
+    public ResponseEntity<Page<Material>> paginationByArea(@PathVariable String nombre, Pageable pageable) {
         return new ResponseEntity<>(materialService.paginationByArea(nombre, pageable), HttpStatus.OK);
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LibroServiceImpl implements LibroService {
     private final LibroRepository libroRepository;
-    private static final String MESSAGE = "No existe un libro con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un libro con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Libro getOne(Long id) {
         try {
-            return libroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return libroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional
     public Libro save(Libro libro) {
         try {
-            return libroRepository.save(libro);
+            return libroRepository.save(cambiarLetras(libro));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,18 +66,17 @@ public class LibroServiceImpl implements LibroService {
         if (libro.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Libro libroById = libroRepository.findById(libro.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + libro.getId()));
+        Libro libroById = libroRepository.findById(libro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + libro.getId()));
         try {
             libroById.setCodigo(libro.getCodigo());
             libroById.setTitulo(libro.getTitulo());
             libroById.setAnio(libro.getAnio());
             libroById.setGrado(libro.getGrado());
-            libroById.setObservaciones(libro.getObservaciones());
             libroById.setAutor(libro.getAutor());
             libroById.setCategoria(libro.getCategoria());
             libroById.setEditorial(libro.getEditorial());
             libroById.setArea(libro.getArea());
-            return libroRepository.save(libroById);
+            return libroRepository.save(cambiarLetras(libroById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -91,7 +90,7 @@ public class LibroServiceImpl implements LibroService {
         }
         try {
             if (!libroRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             libroRepository.deleteById(id);
             return true;
@@ -188,5 +187,12 @@ public class LibroServiceImpl implements LibroService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Libro cambiarLetras(Libro libro) {
+        libro.setCodigo(libro.getCodigo().toUpperCase());
+        libro.setTitulo(libro.getTitulo().toUpperCase());
+        return libro;
     }
 }

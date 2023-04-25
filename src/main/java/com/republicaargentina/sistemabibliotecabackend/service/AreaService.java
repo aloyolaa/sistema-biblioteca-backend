@@ -20,4 +20,6 @@ public interface AreaService {
     Boolean delete(Long id);
 
     long count();
+
+    Area cambiarLetras(Area area);
 }

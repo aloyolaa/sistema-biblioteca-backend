@@ -12,12 +12,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "autor", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_autor_nombre", columnNames = {"nombre"})
+@Table(name = "Autor", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_autor_nombre_apellido", columnNames = {"nombre", "apellido"})
 })
 public class Autor extends BaseEntity {
     @Size(min = 4, message = "{Size.autor.nombre}")
     @NotBlank(message = "{NotBlank.autor.nombre}")
     @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    @Size(min = 4, message = "{Size.autor.apellido}")
+    @NotBlank(message = "{NotBlank.autor.apellido}")
+    @Column(name = "apellido", nullable = false)
+    private String apellido;
 }

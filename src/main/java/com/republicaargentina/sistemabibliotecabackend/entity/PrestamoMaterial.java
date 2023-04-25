@@ -19,12 +19,12 @@ public class PrestamoMaterial extends BaseEntity {
     @Column(name = "fecha_prestamo")
     private LocalDateTime fechaPrestamo;
 
-    @NotNull(message = "{NotNull.prestamoMaterial.fechaLimite}")
-    @Column(name = "fecha_limite", nullable = false)
-    private LocalDateTime fechaLimite;
-
-    @Column(name = "fecha_devolucion", nullable = false)
+    @Column(name = "fecha_devolucion")
     private LocalDateTime fechaDevolucion;
+
+    @NotBlank(message = "{NotBlank.prestamoMaterial.descripcion}")
+    @Column(name = "descripcion", nullable = false)
+    private String descripcion;
 
     @Max(value = 6, message = "{Max.prestamoMaterial.grado}")
     @Min(value = 1, message = "{Min.prestamoMaterial.grado}")

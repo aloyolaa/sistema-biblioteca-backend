@@ -54,7 +54,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional
     public Material save(Material material) {
         try {
-            return materialRepository.save(material);
+            return materialRepository.save(cambiarLetras(material));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -68,12 +68,11 @@ public class MaterialServiceImpl implements MaterialService {
         }
         Material materialById = materialRepository.findById(material.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + material.getId()));
         try {
+            materialById.setCodigo(material.getCodigo());
             materialById.setNombre(material.getNombre());
             materialById.setMedidas(material.getMedidas());
-            materialById.setCantidadInicial(material.getCantidadInicial());
-            materialById.setObservaciones(material.getObservaciones());
             materialById.setArea(material.getArea());
-            return materialRepository.save(materialById);
+            return materialRepository.save(cambiarLetras(materialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -108,9 +107,39 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
+    public Material getOneByNombre(String nombre) {
+        try {
+            return materialRepository.getOneByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("No existe un material con el nombre " + nombre));
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Material getOneByCodigo(String codigo) {
+        try {
+            return materialRepository.getOneByCodigo(codigo).orElseThrow(() -> new EntityNotFoundException("No existe un material con el código " + codigo));
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Material> getAllByNombre(String nombre) {
         try {
             return materialRepository.getAllByNombre(nombre);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Material> getAllByCodigo(String codigo) {
+        try {
+            return materialRepository.getAllByCodigo(codigo);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -124,5 +153,15 @@ public class MaterialServiceImpl implements MaterialService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Material cambiarLetras(Material material) {
+        material.setCodigo(material.getCodigo().toUpperCase());
+        material.setNombre(material.getNombre().toUpperCase());
+        if (material.getMedidas() != null) {
+            material.setMedidas(material.getMedidas().toUpperCase());
+        }
+        return material;
     }
 }

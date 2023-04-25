@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AutorServiceImpl implements AutorService {
     private final AutorRepository autorRepository;
-    private static final String MESSAGE = "No existe un autor con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un autor con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class AutorServiceImpl implements AutorService {
     @Transactional(readOnly = true)
     public Autor getOne(Long id) {
         try {
-            return autorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return autorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class AutorServiceImpl implements AutorService {
     @Transactional
     public Autor save(Autor autor) {
         try {
-            return autorRepository.save(autor);
+            return autorRepository.save(cambiarLetras(autor));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,10 +66,10 @@ public class AutorServiceImpl implements AutorService {
         if (autor.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Autor autorById = autorRepository.findById(autor.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + autor.getId()));
+        Autor autorById = autorRepository.findById(autor.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + autor.getId()));
         try {
             autorById.setNombre(autor.getNombre());
-            return autorRepository.save(autorById);
+            return autorRepository.save(cambiarLetras(autorById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -83,7 +83,7 @@ public class AutorServiceImpl implements AutorService {
         }
         try {
             if (!autorRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             autorRepository.deleteById(id);
             return true;
@@ -100,5 +100,12 @@ public class AutorServiceImpl implements AutorService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Autor cambiarLetras(Autor autor) {
+        autor.setNombre(autor.getNombre().toUpperCase());
+        autor.setApellido(autor.getApellido().toUpperCase());
+        return autor;
     }
 }

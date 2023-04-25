@@ -50,8 +50,13 @@ public class PrestamoMaterialController {
         return new ResponseEntity<>(prestamoMaterialService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/close/{id}")
-    public ResponseEntity<PrestamoMaterial> close(@PathVariable Long id) {
-        return new ResponseEntity<>(prestamoMaterialService.close(id), HttpStatus.OK);
+    @GetMapping("/close")
+    public ResponseEntity<PrestamoMaterial> close(@RequestBody PrestamoMaterial prestamoMaterial) {
+        return new ResponseEntity<>(prestamoMaterialService.close(prestamoMaterial), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
     }
 }

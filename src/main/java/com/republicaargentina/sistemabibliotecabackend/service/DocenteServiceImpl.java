@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DocenteServiceImpl implements DocenteService {
     private final DocenteRepository docenteRepository;
-    private static final String MESSAGE = "No existe un docente con el ID ";
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un docente con el ID ";
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +44,7 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional(readOnly = true)
     public Docente getOne(Long id) {
         try {
-            return docenteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return docenteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -54,7 +54,7 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional
     public Docente save(Docente docente) {
         try {
-            return docenteRepository.save(docente);
+            return docenteRepository.save(cambiarLetras(docente));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -66,13 +66,13 @@ public class DocenteServiceImpl implements DocenteService {
         if (docente.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Docente docenteById = docenteRepository.findById(docente.getId()).orElseThrow(() -> new EntityNotFoundException(MESSAGE + docente.getId()));
+        Docente docenteById = docenteRepository.findById(docente.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + docente.getId()));
         try {
             docenteById.setNombre(docente.getNombre());
             docenteById.setApellido(docente.getApellido());
             docenteById.setDni(docente.getDni());
             docenteById.setTelefono(docente.getTelefono());
-            return docenteRepository.save(docenteById);
+            return docenteRepository.save(cambiarLetras(docenteById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
@@ -86,7 +86,7 @@ public class DocenteServiceImpl implements DocenteService {
         }
         try {
             if (!docenteRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             docenteRepository.deleteById(id);
             return true;
@@ -113,5 +113,12 @@ public class DocenteServiceImpl implements DocenteService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public Docente cambiarLetras(Docente docente) {
+        docente.setNombre(docente.getNombre().toUpperCase());
+        docente.setApellido(docente.getApellido().toUpperCase());
+        return docente;
     }
 }

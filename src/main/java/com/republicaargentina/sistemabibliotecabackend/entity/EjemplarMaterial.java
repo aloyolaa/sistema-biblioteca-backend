@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "ejemplar", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_ejemplar_libro_id_numero", columnNames = {"libro_id", "numero"})
+@Table(name = "ejemplar_material", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_ejemplar_material_material_id_numero", columnNames = {"material_id", "numero"})
 })
-public class Ejemplar extends BaseEntity {
-    @NotNull(message = "{NotNull.ejemplar.numero}")
+public class EjemplarMaterial extends BaseEntity {
+    @NotNull(message = "{NotNull.ejemplarMaterial.numero}")
     @Column(name = "numero", updatable = false)
     private Integer numero;
 
@@ -23,11 +23,11 @@ public class Ejemplar extends BaseEntity {
     @Column(name = "observaciones", length = 1000)
     private String observaciones;
 
-    @NotNull(message = "{NotNull.ejemplar.libro}")
+    @NotNull(message = "{NotNull.ejemplarMaterial.material}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "libro_id", nullable = false, updatable = false)
+    @JoinColumn(name = "material_id", nullable = false, updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Libro libro;
+    private Material material;
 
     @PrePersist
     public void prePersist() {

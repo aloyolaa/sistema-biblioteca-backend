@@ -20,4 +20,6 @@ public interface EditorialService {
     Boolean delete(Long id);
 
     long count();
+
+    Editorial cambiarLetras(Editorial editorial);
 }

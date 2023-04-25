@@ -22,4 +22,6 @@ public interface DocenteService {
     long count();
 
     Docente getOneByDni(String dni);
+
+    Docente cambiarLetras(Docente docente);
 }

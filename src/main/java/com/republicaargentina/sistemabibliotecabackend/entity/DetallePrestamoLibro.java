@@ -11,9 +11,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "detalle_prestamo_libro")
 public class DetallePrestamoLibro extends BaseEntity {
-    @NotNull(message = "{NotNull.detallePrestamoLibro.ejemplar}")
+    @NotNull(message = "{NotNull.detallePrestamoLibro.ejemplarLibro}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ejemplar_id", nullable = false)
+    @JoinColumn(name = "ejemplar_libro_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Ejemplar ejemplar;
+    private EjemplarLibro ejemplarLibro;
 }

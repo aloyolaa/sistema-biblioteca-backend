@@ -20,4 +20,6 @@ public interface AutorService {
     Boolean delete(Long id);
 
     long count();
+
+    Autor cambiarLetras(Autor autor);
 }

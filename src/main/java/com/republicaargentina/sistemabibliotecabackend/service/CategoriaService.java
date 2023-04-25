@@ -20,4 +20,6 @@ public interface CategoriaService {
     Boolean delete(Long id);
 
     long count();
+
+    Categoria cambiarLetras(Categoria categoria);
 }

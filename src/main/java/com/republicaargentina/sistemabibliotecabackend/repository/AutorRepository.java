@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AutorRepository extends JpaRepository<Autor, Long> {
-    @Query("select a from Autor a order by a.nombre")
+    @Query("select a from Autor a order by a.apellido, a.nombre")
     List<Autor> getAll();
 
-    @Query("select a from Autor a order by a.nombre")
+    @Query("select a from Autor a order by a.apellido, a.nombre")
     Page<Autor> pagination(Pageable pageable);
 }

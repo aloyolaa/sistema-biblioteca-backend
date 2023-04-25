@@ -20,14 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     private final PrestamoLibroRepository prestamoLibroRepository;
-    private final EjemplarService ejemplarService;
-    private static final String MESSAGE = "No existe un préstamo con el ID ";
+    private final EjemplarLibroService ejemplarLibroService;
+    private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de libros con el ID ";
 
     @Override
     @Transactional
     public List<PrestamoLibro> getAll() {
         try {
-            cambiarEstados();
             return prestamoLibroRepository.getAll();
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
@@ -38,7 +37,6 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     @Transactional
     public Page<PrestamoLibro> pagination(Pageable pageable) {
         try {
-            cambiarEstados();
             return prestamoLibroRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
@@ -49,7 +47,7 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     @Transactional(readOnly = true)
     public PrestamoLibro getOne(Long id) {
         try {
-            return prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+            return prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -60,8 +58,8 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     public PrestamoLibro save(PrestamoLibro prestamoLibro) {
         try {
             prestamoLibro.getDetalle()
-                    .forEach(d -> ejemplarService.cambiarEstadoAPrestado(d.getEjemplar().getId()));
-            return prestamoLibroRepository.save(prestamoLibro);
+                    .forEach(d -> ejemplarLibroService.cambiarEstadoAPrestado(d.getEjemplarLibro().getId()));
+            return prestamoLibroRepository.save(cambiarLetras(prestamoLibro));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
         }
@@ -75,10 +73,11 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
         }
         try {
             if (!prestamoLibroRepository.existsById(id)) {
-                throw new EntityNotFoundException(MESSAGE + id);
+                throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
-            PrestamoLibro prestamoLibro = prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
-            prestamoLibro.getDetalle().forEach(d -> d.getEjemplar().setEstado("DISPONIBLE"));
+            PrestamoLibro prestamoLibro = prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            prestamoLibro.getDetalle()
+                    .forEach(d -> ejemplarLibroService.cambiarEstadoADisponible(d.getEjemplarLibro().getId()));
             prestamoLibroRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -98,34 +97,21 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
 
     @Override
     @Transactional
-    public PrestamoLibro close(Long id) {
-        PrestamoLibro prestamoLibro = prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MESSAGE + id));
+    public PrestamoLibro close(PrestamoLibro prestamoLibro) {
+        if (prestamoLibro.getId() == null) {
+            throw new IllegalArgumentException("El identificador de necesario para la eliminación.");
+        }
+        PrestamoLibro prestamoLibroById = prestamoLibroRepository.findById(prestamoLibro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoLibro.getId()));
         try {
-            prestamoLibro.setFechaDevolucion(LocalDateTime.now());
-            if (prestamoLibro.getFechaDevolucion().isAfter(prestamoLibro.getFechaLimite())) {
-                prestamoLibro.setEstado("DEVUELTO CON TARDANZA");
-            } else {
-                prestamoLibro.setEstado("DEVUELTO");
-            }
-            prestamoLibro.setObservaciones(prestamoLibro.getObservaciones());
-            prestamoLibro.getDetalle()
-                    .forEach(d -> ejemplarService.cambiarEstadoADisponible(d.getEjemplar().getId()));
-            return prestamoLibroRepository.save(prestamoLibro);
+            prestamoLibroById.setFechaDevolucion(LocalDateTime.now());
+            prestamoLibroById.setEstado("DEVUELTO");
+            prestamoLibroById.setObservaciones(prestamoLibro.getObservaciones());
+            prestamoLibroById.getDetalle()
+                    .forEach(d -> ejemplarLibroService.cambiarEstadoADisponible(d.getEjemplarLibro().getId()));
+            return prestamoLibroRepository.save(cambiarLetras(prestamoLibroById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
         }
-    }
-
-    @Override
-    @Transactional
-    public void cambiarEstados() {
-        prestamoLibroRepository.findAll()
-                .forEach(p -> {
-                    if (p.getFechaDevolucion() == null && LocalDateTime.now().isAfter(p.getFechaLimite())) {
-                        p.setEstado("ATRASADO");
-                        prestamoLibroRepository.save(p);
-                    }
-                });
     }
 
     @Override
@@ -142,5 +128,12 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    public PrestamoLibro cambiarLetras(PrestamoLibro prestamoLibro) {
+        prestamoLibro.setDescripcion(prestamoLibro.getDescripcion().toUpperCase());
+        prestamoLibro.setObservaciones(prestamoLibro.getObservaciones().toUpperCase());
+        return prestamoLibro;
     }
 }
