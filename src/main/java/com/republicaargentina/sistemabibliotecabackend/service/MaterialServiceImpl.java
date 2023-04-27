@@ -147,9 +147,9 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Material> paginationByArea(String nombre, Pageable pageable) {
+    public Page<Material> paginationByArea(Long id, Pageable pageable) {
         try {
-            return materialRepository.paginationByArea(nombre, pageable);
+            return materialRepository.paginationByArea(id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

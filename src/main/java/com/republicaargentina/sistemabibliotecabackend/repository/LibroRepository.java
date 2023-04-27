@@ -28,15 +28,15 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("select l from Libro l where upper(l.codigo) like upper(concat('%', ?1, '%')) order by l.codigo")
     List<Libro> getAllByCodigo(String codigo);
 
-    @Query("select l from Libro l where upper(l.autor.nombre) = upper(?1) order by l.codigo")
-    Page<Libro> paginationByAutor(String nombre, Pageable pageable);
+    @Query("select l from Libro l where l.area.id = ?1 order by l.codigo")
+    Page<Libro> paginationByArea(Long id, Pageable pageable);
 
-    @Query("select l from Libro l where upper(l.categoria.nombre) = upper(?1) order by l.codigo")
-    Page<Libro> paginationByCategoria(String nombre, Pageable pageable);
+    @Query("select l from Libro l where l.categoria.id = ?1 order by l.codigo")
+    Page<Libro> paginationByCategoria(Long id, Pageable pageable);
 
-    @Query("select l from Libro l where upper(l.editorial.nombre) = upper(?1) order by l.codigo")
-    Page<Libro> paginationByEditorial(String nombre, Pageable pageable);
+    @Query("select l from Libro l where l.editorial.id = ?1 order by l.codigo")
+    Page<Libro> paginationByEditorial(Long id, Pageable pageable);
 
-    @Query("select l from Libro l where upper(l.area.nombre) = upper(?1) order by l.codigo")
-    Page<Libro> paginationByArea(String nombre, Pageable pageable);
+    @Query("select l from Libro l inner join l.autores autores where autores.id = ?1 order by l.codigo")
+    Page<Libro> paginationByAutor(Long id, Pageable pageable);
 }

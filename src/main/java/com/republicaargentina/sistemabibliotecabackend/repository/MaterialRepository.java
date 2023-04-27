@@ -28,6 +28,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query("select m from Material m where upper(m.codigo) like upper(concat('%', ?1, '%')) order by m.codigo")
     List<Material> getAllByCodigo(String codigo);
 
-    @Query("select m from Material m where upper(m.area.nombre) = upper(?1) order by m.nombre")
-    Page<Material> paginationByArea(String nombre, Pageable pageable);
+    @Query("select m from Material m where m.area.id = ?1 order by m.codigo")
+    Page<Material> paginationByArea(Long id, Pageable pageable);
 }

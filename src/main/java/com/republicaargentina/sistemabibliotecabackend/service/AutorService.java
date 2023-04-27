@@ -21,5 +21,7 @@ public interface AutorService {
 
     long count();
 
+    List<Autor> getAllByNombreAndApellido(String nombre, String apellido);
+
     Autor cambiarLetras(Autor autor);
 }

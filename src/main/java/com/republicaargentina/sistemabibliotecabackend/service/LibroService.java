@@ -29,13 +29,13 @@ public interface LibroService {
 
     List<Libro> getAllByCodigo(String codigo);
 
-    Page<Libro> paginationByAutor(String nombre, Pageable pageable);
+    Page<Libro> paginationByArea(Long id, Pageable pageable);
 
-    Page<Libro> paginationByCategoria(String nombre, Pageable pageable);
+    Page<Libro> paginationByCategoria(Long id, Pageable pageable);
 
-    Page<Libro> paginationByEditorial(String nombre, Pageable pageable);
+    Page<Libro> paginationByEditorial(Long id, Pageable pageable);
 
-    Page<Libro> paginationByArea(String nombre, Pageable pageable);
+    Page<Libro> paginationByAutor(Long id, Pageable pageable);
 
     Libro cambiarLetras(Libro libro);
 }

@@ -74,8 +74,8 @@ public class MaterialController {
         return new ResponseEntity<>(materialService.getAllByCodigo(codigo), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByArea/{nombre}")
-    public ResponseEntity<Page<Material>> paginationByArea(@PathVariable String nombre, Pageable pageable) {
-        return new ResponseEntity<>(materialService.paginationByArea(nombre, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByArea/{id}")
+    public ResponseEntity<Page<Material>> paginationByArea(@PathVariable Long id, Pageable pageable) {
+        return new ResponseEntity<>(materialService.paginationByArea(id, pageable), HttpStatus.OK);
     }
 }

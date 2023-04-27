@@ -53,4 +53,9 @@ public class AutorController {
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(autorService.count(), HttpStatus.OK);
     }
+
+    @GetMapping("/getAllByNombreAndApellido/{value}")
+    public ResponseEntity<List<Autor>> getAllByNombreAndApellido(@PathVariable String value) {
+        return new ResponseEntity<>(autorService.getAllByNombreAndApellido(value, value), HttpStatus.OK);
+    }
 }

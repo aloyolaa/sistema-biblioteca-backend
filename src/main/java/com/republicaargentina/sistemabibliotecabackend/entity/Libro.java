@@ -6,6 +6,9 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -56,9 +59,10 @@ public class Libro extends BaseEntity {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Editorial editorial;
 
-    @NotNull(message = "{NotNull.libro.autor}")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "autor_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Autor autor;
+    @Size(min = 1, message = "{Size.libro.autores}")
+    @ManyToMany
+    @JoinTable(name = "libro_autor",
+            joinColumns = @JoinColumn(name = "libro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id"))
+    private Set<Autor> autores = new LinkedHashSet<>();
 }

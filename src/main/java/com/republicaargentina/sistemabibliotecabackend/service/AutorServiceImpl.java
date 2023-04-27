@@ -103,6 +103,16 @@ public class AutorServiceImpl implements AutorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Autor> getAllByNombreAndApellido(String nombre, String apellido) {
+        try {
+            return autorRepository.getAllByNombreAndApellido(nombre, apellido);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
     public Autor cambiarLetras(Autor autor) {
         autor.setNombre(autor.getNombre().toUpperCase());
         autor.setApellido(autor.getApellido().toUpperCase());

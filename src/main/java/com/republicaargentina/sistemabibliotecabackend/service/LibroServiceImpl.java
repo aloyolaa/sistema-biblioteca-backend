@@ -72,10 +72,10 @@ public class LibroServiceImpl implements LibroService {
             libroById.setTitulo(libro.getTitulo());
             libroById.setAnio(libro.getAnio());
             libroById.setGrado(libro.getGrado());
-            libroById.setAutor(libro.getAutor());
+            libroById.setArea(libro.getArea());
             libroById.setCategoria(libro.getCategoria());
             libroById.setEditorial(libro.getEditorial());
-            libroById.setArea(libro.getArea());
+            libroById.setAutores(libro.getAutores());
             return libroRepository.save(cambiarLetras(libroById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
@@ -151,9 +151,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> paginationByAutor(String nombre, Pageable pageable) {
+    public Page<Libro> paginationByArea(Long id, Pageable pageable) {
         try {
-            return libroRepository.paginationByAutor(nombre, pageable);
+            return libroRepository.paginationByArea(id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -161,9 +161,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> paginationByCategoria(String nombre, Pageable pageable) {
+    public Page<Libro> paginationByCategoria(Long id, Pageable pageable) {
         try {
-            return libroRepository.paginationByCategoria(nombre, pageable);
+            return libroRepository.paginationByCategoria(id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -171,9 +171,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> paginationByEditorial(String nombre, Pageable pageable) {
+    public Page<Libro> paginationByEditorial(Long id, Pageable pageable) {
         try {
-            return libroRepository.paginationByEditorial(nombre, pageable);
+            return libroRepository.paginationByEditorial(id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -181,9 +181,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> paginationByArea(String nombre, Pageable pageable) {
+    public Page<Libro> paginationByAutor(Long id, Pageable pageable) {
         try {
-            return libroRepository.paginationByArea(nombre, pageable);
+            return libroRepository.paginationByAutor(id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

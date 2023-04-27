@@ -29,7 +29,7 @@ public interface MaterialService {
 
     List<Material> getAllByCodigo(String codigo);
 
-    Page<Material> paginationByArea(String nombre, Pageable pageable);
+    Page<Material> paginationByArea(Long id, Pageable pageable);
 
     Material cambiarLetras(Material material);
 }
