@@ -58,7 +58,7 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     public PrestamoLibro save(PrestamoLibro prestamoLibro) {
         try {
             prestamoLibro.getDetalle()
-                    .forEach(d -> ejemplarLibroService.cambiarEstadoAPrestado(d.getEjemplarLibro().getId()));
+                    .forEach(d -> ejemplarLibroService.cambiarPrestado(d.getEjemplarLibro().getId(), true));
             return prestamoLibroRepository.save(cambiarLetras(prestamoLibro));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
@@ -77,7 +77,7 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
             }
             PrestamoLibro prestamoLibro = prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
             prestamoLibro.getDetalle()
-                    .forEach(d -> ejemplarLibroService.cambiarEstadoADisponible(d.getEjemplarLibro().getId()));
+                    .forEach(d -> ejemplarLibroService.cambiarPrestado(d.getEjemplarLibro().getId(), false));
             prestamoLibroRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -99,15 +99,15 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     @Transactional
     public PrestamoLibro close(PrestamoLibro prestamoLibro) {
         if (prestamoLibro.getId() == null) {
-            throw new IllegalArgumentException("El identificador de necesario para la eliminación.");
+            throw new IllegalArgumentException("El identificador de necesario para el cierre.");
         }
         PrestamoLibro prestamoLibroById = prestamoLibroRepository.findById(prestamoLibro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoLibro.getId()));
         try {
             prestamoLibroById.setFechaDevolucion(LocalDateTime.now());
-            prestamoLibroById.setEstado("DEVUELTO");
+            prestamoLibroById.setActivo(false);
             prestamoLibroById.setObservaciones(prestamoLibro.getObservaciones());
             prestamoLibroById.getDetalle()
-                    .forEach(d -> ejemplarLibroService.cambiarEstadoADisponible(d.getEjemplarLibro().getId()));
+                    .forEach(d -> ejemplarLibroService.cambiarPrestado(d.getEjemplarLibro().getId(), false));
             return prestamoLibroRepository.save(cambiarLetras(prestamoLibroById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);

@@ -19,9 +19,7 @@ public interface EjemplarMaterialService {
 
     long count();
 
-    void cambiarEstadoAPrestado(Long id);
-
-    void cambiarEstadoADisponible(Long id);
+    void cambiarPrestado(Long id, Boolean prestado);
 
     Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
 

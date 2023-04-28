@@ -20,6 +20,9 @@ public class EjemplarMaterial extends BaseEntity {
     @Column(name = "estado")
     private String estado;
 
+    @Column(name = "prestado")
+    private Boolean prestado;
+
     @Column(name = "observaciones", length = 1000)
     private String observaciones;
 
@@ -31,6 +34,8 @@ public class EjemplarMaterial extends BaseEntity {
 
     @PrePersist
     public void prePersist() {
-        this.estado = "DISPONIBLE";
+        this.estado = "BUENO";
+        this.prestado = false;
+        this.observaciones = "";
     }
 }

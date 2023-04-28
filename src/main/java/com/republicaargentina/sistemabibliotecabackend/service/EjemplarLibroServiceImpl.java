@@ -84,7 +84,7 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
         EjemplarLibro ejemplarLibroById = ejemplarLibroRepository.findById(ejemplarLibro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarLibro.getId()));
-        if (ejemplarLibroById.getEstado().equals("PRESTADO")) {
+        if (Boolean.TRUE.equals(ejemplarLibroById.getPrestado())) {
             throw new IllegalArgumentException("No se puede actualizar un ejemplar que esta prestado.");
         }
         try {
@@ -108,17 +108,9 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
 
     @Override
     @Transactional
-    public void cambiarEstadoAPrestado(Long id) {
+    public void cambiarPrestado(Long id, Boolean prestado) {
         EjemplarLibro ejemplarLibro = ejemplarLibroRepository.findById(id).orElseThrow();
-        ejemplarLibro.setEstado("PRESTADO");
-        ejemplarLibroRepository.save(ejemplarLibro);
-    }
-
-    @Override
-    @Transactional
-    public void cambiarEstadoADisponible(Long id) {
-        EjemplarLibro ejemplarLibro = ejemplarLibroRepository.findById(id).orElseThrow();
-        ejemplarLibro.setEstado("DISPONIBLE");
+        ejemplarLibro.setPrestado(prestado);
         ejemplarLibroRepository.save(ejemplarLibro);
     }
 
@@ -164,6 +156,7 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
 
     @Override
     public EjemplarLibro cambiarLetras(EjemplarLibro ejemplarLibro) {
+        ejemplarLibro.setEstado(ejemplarLibro.getEstado());
         ejemplarLibro.setObservaciones(ejemplarLibro.getObservaciones().toUpperCase());
         return ejemplarLibro;
     }

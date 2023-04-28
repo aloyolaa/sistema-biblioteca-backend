@@ -44,6 +44,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PrestamoMaterial getOne(Long id) {
         try {
             return prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -57,7 +58,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     public PrestamoMaterial save(PrestamoMaterial prestamoMaterial) {
         try {
             prestamoMaterial.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarEstadoAPrestado(d.getEjemplarMaterial().getId()));
+                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), true));
             return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterial));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
@@ -76,7 +77,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
             }
             PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
             prestamoMaterial.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarEstadoADisponible(d.getEjemplarMaterial().getId()));
+                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), false));
             prestamoMaterialRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -98,15 +99,15 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional
     public PrestamoMaterial close(PrestamoMaterial prestamoMaterial) {
         if (prestamoMaterial.getId() == null) {
-            throw new IllegalArgumentException("El identificador de necesario para la eliminación.");
+            throw new IllegalArgumentException("El identificador de necesario para el cierre.");
         }
         PrestamoMaterial prestamoMaterialById = prestamoMaterialRepository.findById(prestamoMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoMaterial.getId()));
         try {
             prestamoMaterialById.setFechaDevolucion(LocalDateTime.now());
-            prestamoMaterialById.setEstado("DEVUELTO");
+            prestamoMaterialById.setActivo(false);
             prestamoMaterialById.setObservaciones(prestamoMaterial.getObservaciones());
             prestamoMaterialById.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarEstadoADisponible(d.getEjemplarMaterial().getId()));
+                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), false));
             return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
@@ -114,6 +115,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException("Ambas fechas son requeridas para el filtro");

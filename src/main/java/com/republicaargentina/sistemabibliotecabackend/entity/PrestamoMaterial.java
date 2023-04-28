@@ -36,8 +36,8 @@ public class PrestamoMaterial extends BaseEntity {
     @Column(name = "seccion", nullable = false)
     private String seccion;
 
-    @Column(name = "estado", nullable = false)
-    private String estado;
+    @Column(name = "activo")
+    private Boolean activo;
 
     @Column(name = "observaciones", length = 1000)
     private String observaciones;
@@ -55,7 +55,7 @@ public class PrestamoMaterial extends BaseEntity {
 
     @PrePersist
     public void prePersist() {
-        this.fechaPrestamo = LocalDateTime.now();
-        this.estado = "PENDIENTE";
+        this.activo = true;
+        this.observaciones = "";
     }
 }

@@ -84,6 +84,9 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
         EjemplarMaterial ejemplarMaterialById = ejemplarMaterialRepository.findById(ejemplarMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarMaterial.getId()));
+        if (Boolean.TRUE.equals(ejemplarMaterialById.getPrestado())) {
+            throw new IllegalArgumentException("No se puede actualizar un ejemplar que esta prestado.");
+        }
         try {
             ejemplarMaterialById.setEstado(ejemplarMaterial.getEstado());
             ejemplarMaterialById.setObservaciones(ejemplarMaterial.getObservaciones());
@@ -105,17 +108,9 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
 
     @Override
     @Transactional
-    public void cambiarEstadoAPrestado(Long id) {
+    public void cambiarPrestado(Long id, Boolean prestado) {
         EjemplarMaterial ejemplarMaterial = ejemplarMaterialRepository.findById(id).orElseThrow();
-        ejemplarMaterial.setEstado("PRESTADO");
-        ejemplarMaterialRepository.save(ejemplarMaterial);
-    }
-
-    @Override
-    @Transactional
-    public void cambiarEstadoADisponible(Long id) {
-        EjemplarMaterial ejemplarMaterial = ejemplarMaterialRepository.findById(id).orElseThrow();
-        ejemplarMaterial.setEstado("DISPONIBLE");
+        ejemplarMaterial.setPrestado(prestado);
         ejemplarMaterialRepository.save(ejemplarMaterial);
     }
 
@@ -150,7 +145,7 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public long countByMaterialAndEstado(String codigo) {
         try {
             return ejemplarMaterialRepository.countByMaterialAndEstado(codigo);
@@ -161,6 +156,7 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
 
     @Override
     public EjemplarMaterial cambiarLetras(EjemplarMaterial ejemplarMaterial) {
+        ejemplarMaterial.setEstado(ejemplarMaterial.getEstado());
         ejemplarMaterial.setObservaciones(ejemplarMaterial.getObservaciones().toUpperCase());
         return ejemplarMaterial;
     }

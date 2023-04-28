@@ -19,9 +19,7 @@ public interface EjemplarLibroService {
 
     long count();
 
-    void cambiarEstadoAPrestado(Long id);
-
-    void cambiarEstadoADisponible(Long id);
+    void cambiarPrestado(Long id, Boolean prestado);
 
     Page<EjemplarLibro> paginationByLibro(String codigo, Pageable pageable);
 
