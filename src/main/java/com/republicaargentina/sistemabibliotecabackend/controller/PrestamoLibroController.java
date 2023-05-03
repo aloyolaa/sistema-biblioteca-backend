@@ -50,7 +50,7 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/close")
+    @PutMapping("/close")
     public ResponseEntity<PrestamoLibro> close(@RequestBody PrestamoLibro prestamoLibro) {
         return new ResponseEntity<>(prestamoLibroService.close(prestamoLibro), HttpStatus.OK);
     }
@@ -58,5 +58,10 @@ public class PrestamoLibroController {
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
     public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
         return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByDocente/{dni}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String dni, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByDocente(dni, pageable), HttpStatus.OK);
     }
 }

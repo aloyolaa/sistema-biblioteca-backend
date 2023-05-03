@@ -22,8 +22,8 @@ public interface EjemplarMaterialRepository extends JpaRepository<EjemplarMateri
     @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) order by e.numero")
     Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
 
-    @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) and e.estado != 'MALO' and e.prestado = false order by e.numero")
-    Page<EjemplarMaterial> paginationByMaterialAndEstado(String codigo, Pageable pageable);
+    @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) and e.estado != 'MALO' and e.prestado = false order by e.numero limit ?2")
+    List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad);
 
     @Query("select count(e) from EjemplarMaterial e where upper(e.material.codigo) = upper(?1)")
     long countByMaterial(String codigo);

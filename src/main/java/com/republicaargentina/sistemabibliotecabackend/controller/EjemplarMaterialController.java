@@ -54,9 +54,9 @@ public class EjemplarMaterialController {
         return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByMaterialAndEstado/{codigo}")
-    public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterialAndEstado(@PathVariable String codigo, Pageable pageable) {
-        return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterialAndEstado(codigo, pageable), HttpStatus.OK);
+    @GetMapping("/getAllByMaterialAndEstado/{codigo}/{cantidad}")
+    public ResponseEntity<List<EjemplarMaterial>> getAllByMaterialAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
+        return new ResponseEntity<>(ejemplarMaterialService.getAllByMaterialAndEstado(codigo, cantidad), HttpStatus.OK);
     }
 
     @GetMapping("/countByMaterial/{codigo}")

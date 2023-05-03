@@ -54,9 +54,9 @@ public class EjemplarLibroController {
         return new ResponseEntity<>(ejemplarLibroService.paginationByLibro(codigo, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByLibroAndEstado/{codigo}")
-    public ResponseEntity<Page<EjemplarLibro>> paginationByLibroAndEstado(@PathVariable String codigo, Pageable pageable) {
-        return new ResponseEntity<>(ejemplarLibroService.paginationByLibroAndEstado(codigo, pageable), HttpStatus.OK);
+    @GetMapping("/getAllByLibroAndEstado/{codigo}/{cantidad}")
+    public ResponseEntity<List<EjemplarLibro>> getAllByLibroAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
+        return new ResponseEntity<>(ejemplarLibroService.getAllByLibroAndEstado(codigo, cantidad), HttpStatus.OK);
     }
 
     @GetMapping("/countByLibro/{codigo}")

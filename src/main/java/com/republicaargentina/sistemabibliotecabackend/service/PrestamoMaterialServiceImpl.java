@@ -24,7 +24,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de materiales con el ID ";
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PrestamoMaterial> getAll() {
         try {
             return prestamoMaterialRepository.getAll();
@@ -34,7 +34,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<PrestamoMaterial> pagination(Pageable pageable) {
         try {
             return prestamoMaterialRepository.pagination(pageable);
@@ -125,6 +125,16 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         try {
             return prestamoMaterialRepository.paginationByFechaPrestamo(fechaPrestamoStart, fechaPrestamoEnd, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable) {
+        try {
+            return prestamoMaterialRepository.paginationByDocente(dni, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

@@ -23,7 +23,7 @@ public interface EjemplarMaterialService {
 
     Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
 
-    Page<EjemplarMaterial> paginationByMaterialAndEstado(String codigo, Pageable pageable);
+    List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad);
 
     long countByMaterial(String codigo);
 

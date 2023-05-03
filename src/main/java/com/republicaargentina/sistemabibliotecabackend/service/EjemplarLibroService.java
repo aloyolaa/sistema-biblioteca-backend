@@ -23,7 +23,7 @@ public interface EjemplarLibroService {
 
     Page<EjemplarLibro> paginationByLibro(String codigo, Pageable pageable);
 
-    Page<EjemplarLibro> paginationByLibroAndEstado(String codigo, Pageable pageable);
+    List<EjemplarLibro> getAllByLibroAndEstado(String codigo, Integer cantidad);
 
     long countByLibro(String codigo);
 

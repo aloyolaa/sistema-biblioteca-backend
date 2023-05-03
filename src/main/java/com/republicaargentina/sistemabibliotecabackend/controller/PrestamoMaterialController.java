@@ -1,6 +1,5 @@
 package com.republicaargentina.sistemabibliotecabackend.controller;
 
-
 import com.republicaargentina.sistemabibliotecabackend.entity.PrestamoMaterial;
 import com.republicaargentina.sistemabibliotecabackend.service.PrestamoMaterialService;
 import jakarta.validation.Valid;
@@ -50,7 +49,7 @@ public class PrestamoMaterialController {
         return new ResponseEntity<>(prestamoMaterialService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/close")
+    @PutMapping("/close")
     public ResponseEntity<PrestamoMaterial> close(@RequestBody PrestamoMaterial prestamoMaterial) {
         return new ResponseEntity<>(prestamoMaterialService.close(prestamoMaterial), HttpStatus.OK);
     }
@@ -58,5 +57,10 @@ public class PrestamoMaterialController {
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
     public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
         return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByDocente/{dni}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String dni, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByDocente(dni, pageable), HttpStatus.OK);
     }
 }

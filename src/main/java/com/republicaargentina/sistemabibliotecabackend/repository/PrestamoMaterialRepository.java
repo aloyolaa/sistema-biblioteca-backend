@@ -21,5 +21,5 @@ public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMateri
     Page<PrestamoMaterial> paginationByFechaPrestamo(@Nullable LocalDateTime fechaPrestamoStart, @Nullable LocalDateTime fechaPrestamoEnd, Pageable pageable);
 
     @Query("select p from PrestamoLibro p where p.docente.dni = ?1 order by p.fechaPrestamo DESC")
-    Page<PrestamoMaterial> getAllByDocente(String dni, Pageable pageable);
+    Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable);
 }

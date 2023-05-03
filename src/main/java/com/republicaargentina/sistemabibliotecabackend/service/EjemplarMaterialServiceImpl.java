@@ -126,9 +126,9 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EjemplarMaterial> paginationByMaterialAndEstado(String codigo, Pageable pageable) {
+    public List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad) {
         try {
-            return ejemplarMaterialRepository.paginationByMaterialAndEstado(codigo, pageable);
+            return ejemplarMaterialRepository.getAllByMaterialAndEstado(codigo, cantidad);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

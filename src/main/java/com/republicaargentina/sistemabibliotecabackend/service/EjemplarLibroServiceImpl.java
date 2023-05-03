@@ -126,9 +126,9 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EjemplarLibro> paginationByLibroAndEstado(String codigo, Pageable pageable) {
+    public List<EjemplarLibro> getAllByLibroAndEstado(String codigo, Integer cantidad) {
         try {
-            return ejemplarLibroRepository.paginationByLibroAndEstado(codigo, pageable);
+            return ejemplarLibroRepository.getAllByLibroAndEstado(codigo, cantidad);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

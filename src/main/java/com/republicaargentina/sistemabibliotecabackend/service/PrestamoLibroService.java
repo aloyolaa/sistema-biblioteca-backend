@@ -23,5 +23,7 @@ public interface PrestamoLibroService {
 
     Page<PrestamoLibro> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable);
 
+    Page<PrestamoLibro> paginationByDocente(String dni, Pageable pageable);
+
     PrestamoLibro cambiarLetras(PrestamoLibro prestamoLibro);
 }
