@@ -32,16 +32,6 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Libro> pagination(Pageable pageable) {
-        try {
-            return libroRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Libro getOne(Long id) {
         try {
             return libroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -131,9 +121,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Libro> getAllByTitulo(String titulo) {
+    public Page<Libro> pagination(Pageable pageable) {
         try {
-            return libroRepository.getAllByTitulo(titulo);
+            return libroRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -141,9 +131,19 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Libro> getAllByCodigo(String codigo) {
+    public Page<Libro> paginationByTitulo(String titulo, Pageable pageable) {
         try {
-            return libroRepository.getAllByCodigo(codigo);
+            return libroRepository.paginationByTitulo(titulo, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Libro> paginationByCodigo(String codigo, Pageable pageable) {
+        try {
+            return libroRepository.paginationByCodigo(codigo, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

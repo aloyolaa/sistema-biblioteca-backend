@@ -37,16 +37,6 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> pagination(Pageable pageable) {
-        try {
-            return prestamoMaterialRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public PrestamoMaterial getOne(Long id) {
         try {
             return prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -113,6 +103,16 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
             return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> pagination(Pageable pageable) {
+        try {
+            return prestamoMaterialRepository.pagination(pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 

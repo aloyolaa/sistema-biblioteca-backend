@@ -32,16 +32,6 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Categoria> pagination(Pageable pageable) {
-        try {
-            return categoriaRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Categoria getOne(Long id) {
         try {
             return categoriaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -97,6 +87,16 @@ public class CategoriaServiceImpl implements CategoriaService {
     public long count() {
         try {
             return categoriaRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Categoria> pagination(Pageable pageable) {
+        try {
+            return categoriaRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

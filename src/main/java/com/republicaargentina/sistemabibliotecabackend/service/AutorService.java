@@ -9,8 +9,6 @@ import java.util.List;
 public interface AutorService {
     List<Autor> getAll();
 
-    Page<Autor> pagination(Pageable pageable);
-
     Autor getOne(Long id);
 
     Autor save(Autor autor);
@@ -22,6 +20,8 @@ public interface AutorService {
     long count();
 
     List<Autor> getAllByNombreAndApellido(String nombre, String apellido);
+
+    Page<Autor> pagination(Pageable pageable);
 
     Autor cambiarLetras(Autor autor);
 }

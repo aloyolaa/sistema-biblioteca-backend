@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.AreaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +22,6 @@ public class AreaController {
     @GetMapping("/")
     public ResponseEntity<List<Area>> getAll() {
         return new ResponseEntity<>(areaService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<Area>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(areaService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -52,5 +47,10 @@ public class AreaController {
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(areaService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<Area>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(areaService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

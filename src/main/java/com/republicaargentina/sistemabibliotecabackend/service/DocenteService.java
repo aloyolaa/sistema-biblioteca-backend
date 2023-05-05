@@ -9,8 +9,6 @@ import java.util.List;
 public interface DocenteService {
     List<Docente> getAll();
 
-    Page<Docente> pagination(Pageable pageable);
-
     Docente getOne(Long id);
 
     Docente save(Docente docente);
@@ -22,6 +20,8 @@ public interface DocenteService {
     long count();
 
     Docente getOneByDni(String dni);
+
+    Page<Docente> pagination(Pageable pageable);
 
     Docente cambiarLetras(Docente docente);
 }

@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,6 @@ public class EjemplarMaterialController {
     @GetMapping("/")
     public ResponseEntity<List<EjemplarMaterial>> getAll() {
         return new ResponseEntity<>(ejemplarMaterialService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<EjemplarMaterial>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(ejemplarMaterialService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -50,11 +44,6 @@ public class EjemplarMaterialController {
         return new ResponseEntity<>(ejemplarMaterialService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByMaterial/{codigo}/{page}")
-    public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterial(@PathVariable String codigo, @PathVariable Integer page) {
-        return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
-    }
-
     @GetMapping("/getAllByMaterialAndEstado/{codigo}/{cantidad}")
     public ResponseEntity<List<EjemplarMaterial>> getAllByMaterialAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarMaterialService.getAllByMaterialAndEstado(codigo, cantidad), HttpStatus.OK);
@@ -68,5 +57,15 @@ public class EjemplarMaterialController {
     @GetMapping("/countByMaterialAndEstado/{codigo}")
     public ResponseEntity<Long> countByMaterialAndEstado(@PathVariable String codigo) {
         return new ResponseEntity<>(ejemplarMaterialService.countByMaterialAndEstado(codigo), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<EjemplarMaterial>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(ejemplarMaterialService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByMaterial/{codigo}/{page}")
+    public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterial(@PathVariable String codigo, @PathVariable Integer page) {
+        return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

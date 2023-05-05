@@ -13,14 +13,8 @@ public interface EjemplarMaterialRepository extends JpaRepository<EjemplarMateri
     @Query("select e from EjemplarMaterial e order by e.material.codigo, e.numero")
     List<EjemplarMaterial> getAll();
 
-    @Query("select e from EjemplarMaterial e order by e.material.codigo, e.numero")
-    Page<EjemplarMaterial> pagination(Pageable pageable);
-
     @Query(value = "select e from EjemplarMaterial e where e.material.id = ?1 order by e.id desc limit 1")
     Optional<EjemplarMaterial> getOneByMaterial(Long id);
-
-    @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) order by e.numero")
-    Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
 
     @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) and e.estado != 'MALO' and e.prestado = false order by e.numero limit ?2")
     List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad);
@@ -30,4 +24,10 @@ public interface EjemplarMaterialRepository extends JpaRepository<EjemplarMateri
 
     @Query("select count(e) from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) and e.estado != 'MALO' and e.prestado = false")
     long countByMaterialAndEstado(String codigo);
+
+    @Query("select e from EjemplarMaterial e order by e.material.codigo, e.numero")
+    Page<EjemplarMaterial> pagination(Pageable pageable);
+
+    @Query("select e from EjemplarMaterial e where upper(e.material.codigo) = upper(?1) order by e.numero")
+    Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
 }

@@ -13,9 +13,9 @@ public interface DocenteRepository extends JpaRepository<Docente, Long> {
     @Query("select d from Docente d order by d.apellido, d.nombre")
     List<Docente> getAll();
 
-    @Query("select d from Docente d order by d.apellido, d.nombre")
-    Page<Docente> pagination(Pageable pageable);
-
     @Query("select d from Docente d where d.dni = ?1")
     Optional<Docente> getOneByDni(String dni);
+
+    @Query("select d from Docente d order by d.apellido, d.nombre")
+    Page<Docente> pagination(Pageable pageable);
 }

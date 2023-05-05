@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +22,6 @@ public class CategoriaController {
     @GetMapping("/")
     public ResponseEntity<List<Categoria>> getAll() {
         return new ResponseEntity<>(categoriaService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<Categoria>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(categoriaService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -52,5 +47,10 @@ public class CategoriaController {
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(categoriaService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<Categoria>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(categoriaService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

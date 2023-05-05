@@ -9,8 +9,6 @@ import java.util.List;
 public interface EditorialService {
     List<Editorial> getAll();
 
-    Page<Editorial> pagination(Pageable pageable);
-
     Editorial getOne(Long id);
 
     Editorial save(Editorial editorial);
@@ -20,6 +18,8 @@ public interface EditorialService {
     Boolean delete(Long id);
 
     long count();
+
+    Page<Editorial> pagination(Pageable pageable);
 
     Editorial cambiarLetras(Editorial editorial);
 }

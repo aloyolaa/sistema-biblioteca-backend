@@ -32,16 +32,6 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Area> pagination(Pageable pageable) {
-        try {
-            return areaRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Area getOne(Long id) {
         try {
             return areaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -97,6 +87,16 @@ public class AreaServiceImpl implements AreaService {
     public long count() {
         try {
             return areaRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Area> pagination(Pageable pageable) {
+        try {
+            return areaRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

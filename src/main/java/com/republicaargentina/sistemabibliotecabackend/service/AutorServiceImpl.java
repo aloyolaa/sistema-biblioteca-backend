@@ -32,16 +32,6 @@ public class AutorServiceImpl implements AutorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Autor> pagination(Pageable pageable) {
-        try {
-            return autorRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Autor getOne(Long id) {
         try {
             return autorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -107,6 +97,16 @@ public class AutorServiceImpl implements AutorService {
     public List<Autor> getAllByNombreAndApellido(String nombre, String apellido) {
         try {
             return autorRepository.getAllByNombreAndApellido(nombre, apellido);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Autor> pagination(Pageable pageable) {
+        try {
+            return autorRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

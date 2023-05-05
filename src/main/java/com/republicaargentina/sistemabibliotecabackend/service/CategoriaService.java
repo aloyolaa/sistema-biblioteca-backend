@@ -9,8 +9,6 @@ import java.util.List;
 public interface CategoriaService {
     List<Categoria> getAll();
 
-    Page<Categoria> pagination(Pageable pageable);
-
     Categoria getOne(Long id);
 
     Categoria save(Categoria categoriaLibro);
@@ -20,6 +18,8 @@ public interface CategoriaService {
     Boolean delete(Long id);
 
     long count();
+
+    Page<Categoria> pagination(Pageable pageable);
 
     Categoria cambiarLetras(Categoria categoria);
 }

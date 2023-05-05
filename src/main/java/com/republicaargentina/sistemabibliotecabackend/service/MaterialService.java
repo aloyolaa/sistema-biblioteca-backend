@@ -9,8 +9,6 @@ import java.util.List;
 public interface MaterialService {
     List<Material> getAll();
 
-    Page<Material> pagination(Pageable pageable);
-
     Material getOne(Long id);
 
     Material save(Material material);
@@ -25,9 +23,11 @@ public interface MaterialService {
 
     Material getOneByCodigo(String codigo);
 
-    List<Material> getAllByNombre(String nombre);
+    Page<Material> pagination(Pageable pageable);
 
-    List<Material> getAllByCodigo(String codigo);
+    Page<Material> paginationByNombre(String nombre, Pageable pageable);
+
+    Page<Material> paginationByCodigo(String codigo, Pageable pageable);
 
     Page<Material> paginationByArea(Long id, Pageable pageable);
 

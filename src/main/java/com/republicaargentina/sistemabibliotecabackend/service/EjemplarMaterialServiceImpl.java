@@ -35,16 +35,6 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EjemplarMaterial> pagination(Pageable pageable) {
-        try {
-            return ejemplarMaterialRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public EjemplarMaterial getOne(Long id) {
         try {
             return ejemplarMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -107,24 +97,6 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
     }
 
     @Override
-    @Transactional
-    public void cambiarPrestado(Long id, Boolean prestado) {
-        EjemplarMaterial ejemplarMaterial = ejemplarMaterialRepository.findById(id).orElseThrow();
-        ejemplarMaterial.setPrestado(prestado);
-        ejemplarMaterialRepository.save(ejemplarMaterial);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable) {
-        try {
-            return ejemplarMaterialRepository.paginationByMaterial(codigo, pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad) {
         try {
@@ -152,6 +124,34 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EjemplarMaterial> pagination(Pageable pageable) {
+        try {
+            return ejemplarMaterialRepository.pagination(pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable) {
+        try {
+            return ejemplarMaterialRepository.paginationByMaterial(codigo, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cambiarPrestado(Long id, Boolean prestado) {
+        EjemplarMaterial ejemplarMaterial = ejemplarMaterialRepository.findById(id).orElseThrow();
+        ejemplarMaterial.setPrestado(prestado);
+        ejemplarMaterialRepository.save(ejemplarMaterial);
     }
 
     @Override

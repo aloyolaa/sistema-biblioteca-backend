@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,6 @@ public class EjemplarLibroController {
     @GetMapping("/")
     public ResponseEntity<List<EjemplarLibro>> getAll() {
         return new ResponseEntity<>(ejemplarLibroService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<EjemplarLibro>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(ejemplarLibroService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -50,11 +44,6 @@ public class EjemplarLibroController {
         return new ResponseEntity<>(ejemplarLibroService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByLibro/{codigo}/{page}")
-    public ResponseEntity<Page<EjemplarLibro>> paginationByLibro(@PathVariable String codigo, @PathVariable Integer page) {
-        return new ResponseEntity<>(ejemplarLibroService.paginationByLibro(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
-    }
-
     @GetMapping("/getAllByLibroAndEstado/{codigo}/{cantidad}")
     public ResponseEntity<List<EjemplarLibro>> getAllByLibroAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarLibroService.getAllByLibroAndEstado(codigo, cantidad), HttpStatus.OK);
@@ -68,5 +57,15 @@ public class EjemplarLibroController {
     @GetMapping("/countByLibroAndEstado/{codigo}")
     public ResponseEntity<Long> countByLibroAndEstado(@PathVariable String codigo) {
         return new ResponseEntity<>(ejemplarLibroService.countByLibroAndEstado(codigo), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<EjemplarLibro>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(ejemplarLibroService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByLibro/{codigo}/{page}")
+    public ResponseEntity<Page<EjemplarLibro>> paginationByLibro(@PathVariable String codigo, @PathVariable Integer page) {
+        return new ResponseEntity<>(ejemplarLibroService.paginationByLibro(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

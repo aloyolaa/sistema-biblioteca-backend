@@ -9,8 +9,6 @@ import java.util.List;
 public interface EjemplarMaterialService {
     List<EjemplarMaterial> getAll();
 
-    Page<EjemplarMaterial> pagination(Pageable pageable);
-
     EjemplarMaterial getOne(Long id);
 
     Boolean save(Long materialId, Integer cantidad);
@@ -19,15 +17,17 @@ public interface EjemplarMaterialService {
 
     long count();
 
-    void cambiarPrestado(Long id, Boolean prestado);
-
-    Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
-
     List<EjemplarMaterial> getAllByMaterialAndEstado(String codigo, Integer cantidad);
 
     long countByMaterial(String codigo);
 
     long countByMaterialAndEstado(String codigo);
+
+    Page<EjemplarMaterial> pagination(Pageable pageable);
+
+    Page<EjemplarMaterial> paginationByMaterial(String codigo, Pageable pageable);
+
+    void cambiarPrestado(Long id, Boolean prestado);
 
     EjemplarMaterial cambiarLetras(EjemplarMaterial ejemplarMaterial);
 }

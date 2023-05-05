@@ -35,16 +35,6 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EjemplarLibro> pagination(Pageable pageable) {
-        try {
-            return ejemplarLibroRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public EjemplarLibro getOne(Long id) {
         try {
             return ejemplarLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -107,24 +97,6 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
     }
 
     @Override
-    @Transactional
-    public void cambiarPrestado(Long id, Boolean prestado) {
-        EjemplarLibro ejemplarLibro = ejemplarLibroRepository.findById(id).orElseThrow();
-        ejemplarLibro.setPrestado(prestado);
-        ejemplarLibroRepository.save(ejemplarLibro);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<EjemplarLibro> paginationByLibro(String codigo, Pageable pageable) {
-        try {
-            return ejemplarLibroRepository.paginationByLibro(codigo, pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<EjemplarLibro> getAllByLibroAndEstado(String codigo, Integer cantidad) {
         try {
@@ -152,6 +124,34 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EjemplarLibro> pagination(Pageable pageable) {
+        try {
+            return ejemplarLibroRepository.pagination(pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EjemplarLibro> paginationByLibro(String codigo, Pageable pageable) {
+        try {
+            return ejemplarLibroRepository.paginationByLibro(codigo, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cambiarPrestado(Long id, Boolean prestado) {
+        EjemplarLibro ejemplarLibro = ejemplarLibroRepository.findById(id).orElseThrow();
+        ejemplarLibro.setPrestado(prestado);
+        ejemplarLibroRepository.save(ejemplarLibro);
     }
 
     @Override

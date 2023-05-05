@@ -9,8 +9,6 @@ import java.util.List;
 public interface AreaService {
     List<Area> getAll();
 
-    Page<Area> pagination(Pageable pageable);
-
     Area getOne(Long id);
 
     Area save(Area area);
@@ -20,6 +18,8 @@ public interface AreaService {
     Boolean delete(Long id);
 
     long count();
+
+    Page<Area> pagination(Pageable pageable);
 
     Area cambiarLetras(Area area);
 }

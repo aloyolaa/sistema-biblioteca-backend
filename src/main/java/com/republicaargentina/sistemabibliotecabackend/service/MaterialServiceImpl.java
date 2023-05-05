@@ -32,16 +32,6 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Material> pagination(Pageable pageable) {
-        try {
-            return materialRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Material getOne(Long id) {
         try {
             return materialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -127,9 +117,9 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Material> getAllByNombre(String nombre) {
+    public Page<Material> pagination(Pageable pageable) {
         try {
-            return materialRepository.getAllByNombre(nombre);
+            return materialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -137,9 +127,19 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Material> getAllByCodigo(String codigo) {
+    public Page<Material> paginationByNombre(String nombre, Pageable pageable) {
         try {
-            return materialRepository.getAllByCodigo(codigo);
+            return materialRepository.paginationByNombre(nombre, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Material> paginationByCodigo(String codigo, Pageable pageable) {
+        try {
+            return materialRepository.paginationByCodigo(codigo, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

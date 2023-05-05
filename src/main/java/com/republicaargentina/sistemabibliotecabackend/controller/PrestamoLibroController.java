@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +23,6 @@ public class PrestamoLibroController {
     @GetMapping("/")
     public ResponseEntity<List<PrestamoLibro>> getAll() {
         return new ResponseEntity<>(prestamoLibroService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<PrestamoLibro>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -54,6 +48,11 @@ public class PrestamoLibroController {
     @PutMapping("/close")
     public ResponseEntity<PrestamoLibro> close(@RequestBody PrestamoLibro prestamoLibro) {
         return new ResponseEntity<>(prestamoLibroService.close(prestamoLibro), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByDocente/{dni}/{page}")

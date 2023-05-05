@@ -9,8 +9,6 @@ import java.util.List;
 public interface LibroService {
     List<Libro> getAll();
 
-    Page<Libro> pagination(Pageable pageable);
-
     Libro getOne(Long id);
 
     Libro save(Libro libro);
@@ -25,9 +23,11 @@ public interface LibroService {
 
     Libro getOneByCodigo(String codigo);
 
-    List<Libro> getAllByTitulo(String titulo);
+    Page<Libro> pagination(Pageable pageable);
 
-    List<Libro> getAllByCodigo(String codigo);
+    Page<Libro> paginationByTitulo(String titulo, Pageable pageable);
+
+    Page<Libro> paginationByCodigo(String codigo, Pageable pageable);
 
     Page<Libro> paginationByArea(Long id, Pageable pageable);
 

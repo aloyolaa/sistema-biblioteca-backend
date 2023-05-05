@@ -32,16 +32,6 @@ public class EditorialServiceImpl implements EditorialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Editorial> pagination(Pageable pageable) {
-        try {
-            return editorialRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Editorial getOne(Long id) {
         try {
             return editorialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -97,6 +87,16 @@ public class EditorialServiceImpl implements EditorialService {
     public long count() {
         try {
             return editorialRepository.count();
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Editorial> pagination(Pageable pageable) {
+        try {
+            return editorialRepository.pagination(pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

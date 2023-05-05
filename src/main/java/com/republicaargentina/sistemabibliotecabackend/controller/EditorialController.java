@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.EditorialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +22,6 @@ public class EditorialController {
     @GetMapping("/")
     public ResponseEntity<List<Editorial>> getAll() {
         return new ResponseEntity<>(editorialService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<Editorial>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(editorialService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -52,5 +47,10 @@ public class EditorialController {
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(editorialService.count(), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<Editorial>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(editorialService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

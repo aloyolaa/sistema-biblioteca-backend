@@ -13,20 +13,20 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("select l from Libro l order by l.codigo")
     List<Libro> getAll();
 
-    @Query("select l from Libro l order by l.codigo")
-    Page<Libro> pagination(Pageable pageable);
-
     @Query("select l from Libro l where upper(l.titulo) = upper(?1)")
     Optional<Libro> getOneByTitulo(String titulo);
 
     @Query("select l from Libro l where upper(l.codigo) = upper(?1)")
     Optional<Libro> getOneByCodigo(String codigo);
 
+    @Query("select l from Libro l order by l.codigo")
+    Page<Libro> pagination(Pageable pageable);
+
     @Query("select l from Libro l where upper(l.titulo) like upper(concat('%', ?1, '%')) order by l.codigo")
-    List<Libro> getAllByTitulo(String titulo);
+    Page<Libro> paginationByTitulo(String titulo, Pageable pageable);
 
     @Query("select l from Libro l where upper(l.codigo) like upper(concat('%', ?1, '%')) order by l.codigo")
-    List<Libro> getAllByCodigo(String codigo);
+    Page<Libro> paginationByCodigo(String codigo, Pageable pageable);
 
     @Query("select l from Libro l where l.area.id = ?1 order by l.codigo")
     Page<Libro> paginationByArea(Long id, Pageable pageable);

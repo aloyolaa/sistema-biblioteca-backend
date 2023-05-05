@@ -9,8 +9,6 @@ import java.util.List;
 public interface PrestamoMaterialService {
     List<PrestamoMaterial> getAll();
 
-    Page<PrestamoMaterial> pagination(Pageable pageable);
-
     PrestamoMaterial getOne(Long id);
 
     PrestamoMaterial save(PrestamoMaterial prestamoMaterial);
@@ -20,6 +18,8 @@ public interface PrestamoMaterialService {
     long count();
 
     PrestamoMaterial close(PrestamoMaterial prestamoMaterial);
+
+    Page<PrestamoMaterial> pagination(Pageable pageable);
 
     Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable);
 

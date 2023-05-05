@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,6 @@ public class LibroController {
     @GetMapping("/")
     public ResponseEntity<List<Libro>> getAll() {
         return new ResponseEntity<>(libroService.getAll(), HttpStatus.OK);
-    }
-
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<Libro>> pagination(Pageable pageable) {
-        return new ResponseEntity<>(libroService.pagination(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/getOne/{id}")
@@ -65,14 +59,19 @@ public class LibroController {
         return new ResponseEntity<>(libroService.getOneByCodigo(codigo), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllByTitulo/{titulo}")
-    public ResponseEntity<List<Libro>> getAllByTitulo(@PathVariable String titulo) {
-        return new ResponseEntity<>(libroService.getAllByTitulo(titulo), HttpStatus.OK);
+    @GetMapping("/pagination/{page}")
+    public ResponseEntity<Page<Libro>> pagination(@PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
-    @GetMapping("/getAllByCodigo/{codigo}")
-    public ResponseEntity<List<Libro>> getAllByCodigo(@PathVariable String codigo) {
-        return new ResponseEntity<>(libroService.getAllByCodigo(codigo), HttpStatus.OK);
+    @GetMapping("/paginationByTitulo/{titulo}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByTitulo(@PathVariable String titulo, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByTitulo(titulo, PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByCodigo/{codigo}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByCodigo(@PathVariable String codigo, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByCodigo(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByArea/{id}/{page}")

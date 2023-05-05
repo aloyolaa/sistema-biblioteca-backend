@@ -37,16 +37,6 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoLibro> pagination(Pageable pageable) {
-        try {
-            return prestamoLibroRepository.pagination(pageable);
-        } catch (DataAccessException e) {
-            throw new DataAccessExceptionImpl(e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public PrestamoLibro getOne(Long id) {
         try {
             return prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
@@ -113,6 +103,16 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
             return prestamoLibroRepository.save(cambiarLetras(prestamoLibroById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoLibro> pagination(Pageable pageable) {
+        try {
+            return prestamoLibroRepository.pagination(pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 
