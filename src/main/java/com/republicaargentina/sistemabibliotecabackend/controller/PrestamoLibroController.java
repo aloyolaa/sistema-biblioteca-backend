@@ -6,6 +6,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.PrestamoLibroServ
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +56,28 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.close(prestamoLibro), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByDocente/{dni}/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByDocente(@PathVariable String dni, @PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByDocente(dni, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByDocente/{dni}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String dni, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByDocente(dni, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByGradoAndSeccion/{grado}/{seccion}/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByGradoAndSeccion(@PathVariable Integer grado, @PathVariable String seccion, @PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByGradoAndSeccion(grado, seccion, PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamoAndDocente/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{docenteId}/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDocente(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Long docenteId, @PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDocente(fechaPrestamoStartStr, fechaPrestamoEndStr, docenteId, PageRequest.of(page, 4)), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}/{page}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, @PathVariable Integer page) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

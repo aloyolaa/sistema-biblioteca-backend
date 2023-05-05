@@ -21,6 +21,8 @@ import java.util.List;
 public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     private final PrestamoLibroRepository prestamoLibroRepository;
     private final EjemplarLibroService ejemplarLibroService;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final String DATETIME_MESSAGE = "Ambas fechas son requeridas para el filtro";
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de libros con el ID ";
 
     @Override
@@ -116,11 +118,30 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PrestamoLibro> paginationByDocente(String dni, Pageable pageable) {
+        try {
+            return prestamoLibroRepository.paginationByDocente(dni, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoLibro> paginationByGradoAndSeccion(Integer grado, String seccion, Pageable pageable) {
+        try {
+            return prestamoLibroRepository.paginationByGradoAndSeccion(grado, seccion, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<PrestamoLibro> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
-            throw new IllegalArgumentException("Ambas fechas son requeridas para el filtro");
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         try {
@@ -132,9 +153,29 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoLibro> paginationByDocente(String dni, Pageable pageable) {
+    public Page<PrestamoLibro> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Long id, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
+        }
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         try {
-            return prestamoLibroRepository.paginationByDocente(dni, pageable);
+            return prestamoLibroRepository.paginationByFechaPrestamoAndDocente(fechaPrestamoStart, fechaPrestamoEnd, id, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoLibro> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
+        }
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        try {
+            return prestamoLibroRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart, fechaPrestamoEnd, grado, seccion, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

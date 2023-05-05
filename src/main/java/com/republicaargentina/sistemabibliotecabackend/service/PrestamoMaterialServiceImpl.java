@@ -21,7 +21,9 @@ import java.util.List;
 public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     private final PrestamoMaterialRepository prestamoMaterialRepository;
     private final EjemplarMaterialService ejemplarMaterialService;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de materiales con el ID ";
+    private static final String DATETIME_MESSAGE = "Ambas fechas son requeridas para el filtro";
 
     @Override
     @Transactional(readOnly = true)
@@ -116,11 +118,30 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable) {
+        try {
+            return prestamoMaterialRepository.paginationByDocente(dni, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByGradoAndSeccion(Integer grado, String seccion, Pageable pageable) {
+        try {
+            return prestamoMaterialRepository.paginationByGradoAndSeccion(grado, seccion, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
-            throw new IllegalArgumentException("Ambas fechas son requeridas para el filtro");
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         try {
@@ -132,9 +153,29 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable) {
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Long id, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
+        }
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         try {
-            return prestamoMaterialRepository.paginationByDocente(dni, pageable);
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndDocente(fechaPrestamoStart, fechaPrestamoEnd, id, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
+        }
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        try {
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart, fechaPrestamoEnd, grado, seccion, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

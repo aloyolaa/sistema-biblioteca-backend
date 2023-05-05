@@ -5,6 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.EjemplarMaterialS
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +50,9 @@ public class EjemplarMaterialController {
         return new ResponseEntity<>(ejemplarMaterialService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByMaterial/{codigo}")
-    public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterial(@PathVariable String codigo, Pageable pageable) {
-        return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByMaterial/{codigo}/{page}")
+    public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterial(@PathVariable String codigo, @PathVariable Integer page) {
+        return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
     @GetMapping("/getAllByMaterialAndEstado/{codigo}/{cantidad}")

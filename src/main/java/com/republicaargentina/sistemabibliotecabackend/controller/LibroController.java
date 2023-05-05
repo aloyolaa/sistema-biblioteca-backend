@@ -5,6 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.LibroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,23 +75,23 @@ public class LibroController {
         return new ResponseEntity<>(libroService.getAllByCodigo(codigo), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByArea/{id}")
-    public ResponseEntity<Page<Libro>> paginationByArea(@PathVariable Long id, Pageable pageable) {
-        return new ResponseEntity<>(libroService.paginationByArea(id, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByArea/{id}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByArea(@PathVariable Long id, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByArea(id, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByCategoria/{id}")
-    public ResponseEntity<Page<Libro>> paginationByCategoria(@PathVariable Long id, Pageable pageable) {
-        return new ResponseEntity<>(libroService.paginationByCategoria(id, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByCategoria/{id}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByCategoria(@PathVariable Long id, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByCategoria(id, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByEditorial/{id}")
-    public ResponseEntity<Page<Libro>> paginationByEditorial(@PathVariable Long id, Pageable pageable) {
-        return new ResponseEntity<>(libroService.paginationByEditorial(id, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByEditorial/{id}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByEditorial(@PathVariable Long id, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByEditorial(id, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByAutor/{id}")
-    public ResponseEntity<Page<Libro>> paginationByAutor(@PathVariable Long id, Pageable pageable) {
-        return new ResponseEntity<>(libroService.paginationByAutor(id, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByAutor/{id}/{page}")
+    public ResponseEntity<Page<Libro>> paginationByAutor(@PathVariable Long id, @PathVariable Integer page) {
+        return new ResponseEntity<>(libroService.paginationByAutor(id, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }

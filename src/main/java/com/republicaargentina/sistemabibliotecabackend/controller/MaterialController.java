@@ -5,6 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.MaterialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,8 +75,8 @@ public class MaterialController {
         return new ResponseEntity<>(materialService.getAllByCodigo(codigo), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByArea/{id}")
-    public ResponseEntity<Page<Material>> paginationByArea(@PathVariable Long id, Pageable pageable) {
-        return new ResponseEntity<>(materialService.paginationByArea(id, pageable), HttpStatus.OK);
+    @GetMapping("/paginationByArea/{id}/{page}")
+    public ResponseEntity<Page<Material>> paginationByArea(@PathVariable Long id, @PathVariable Integer page) {
+        return new ResponseEntity<>(materialService.paginationByArea(id, PageRequest.of(page, 4)), HttpStatus.OK);
     }
 }
