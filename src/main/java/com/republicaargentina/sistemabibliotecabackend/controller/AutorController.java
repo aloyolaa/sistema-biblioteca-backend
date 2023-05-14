@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,8 +54,8 @@ public class AutorController {
         return new ResponseEntity<>(autorService.getAllByNombreAndApellido(value, value), HttpStatus.OK);
     }
 
-    @GetMapping("/pagination/{page}")
-    public ResponseEntity<Page<Autor>> pagination(@PathVariable Integer page) {
-        return new ResponseEntity<>(autorService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Autor>> pagination(Pageable pageable) {
+        return new ResponseEntity<>(autorService.pagination(pageable), HttpStatus.OK);
     }
 }

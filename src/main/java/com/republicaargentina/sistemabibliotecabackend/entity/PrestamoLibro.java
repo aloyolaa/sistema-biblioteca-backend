@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "prestamo_libro")
 public class PrestamoLibro extends BaseEntity {
-    @NotNull(message = "{NotNull.prestamoLibro.fechaPrestamo}")
+
     @Column(name = "fecha_prestamo")
     private LocalDateTime fechaPrestamo;
 
@@ -55,6 +55,7 @@ public class PrestamoLibro extends BaseEntity {
 
     @PrePersist
     public void prePersist() {
+        this.fechaPrestamo = LocalDateTime.now();
         this.activo = true;
         this.observaciones = "";
     }

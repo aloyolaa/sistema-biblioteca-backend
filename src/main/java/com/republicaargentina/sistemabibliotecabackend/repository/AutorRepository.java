@@ -17,6 +17,6 @@ public interface AutorRepository extends JpaRepository<Autor, Long> {
             where upper(a.nombre) like upper(concat('%', ?1, '%')) or upper(a.apellido) like upper(concat('%', ?2, '%'))""")
     List<Autor> getAllByNombreAndApellido(String nombre, String apellido);
 
-    @Query("select a from Autor a order by a.apellido, a.nombre")
+    @Query("select a from Autor a order by a.nombre, a.apellido")
     Page<Autor> pagination(Pageable pageable);
 }

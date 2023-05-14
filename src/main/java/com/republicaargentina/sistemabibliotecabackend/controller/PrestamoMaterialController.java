@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.PrestamoMaterialS
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,33 +49,33 @@ public class PrestamoMaterialController {
         return new ResponseEntity<>(prestamoMaterialService.close(prestamoMaterial), HttpStatus.OK);
     }
 
-    @GetMapping("/pagination/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> pagination(@PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<PrestamoMaterial>> pagination(Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByDocente/{dni}/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> paginationByDocente(@PathVariable String dni, @PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByDocente(dni, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByDocente/{dni}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByDocente(@PathVariable String dni, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByDocente(dni, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByGradoAndSeccion/{grado}/{seccion}/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> paginationByGradoAndSeccion(@PathVariable Integer grado, @PathVariable String seccion, @PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByGradoAndSeccion(grado, seccion, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByGradoAndSeccion/{grado}/{seccion}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByGradoAndSeccion(@PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByGradoAndSeccion(grado, seccion, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByFechaPrestamoAndDocente/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{docenteId}/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndDocente(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Long docenteId, @PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndDocente(fechaPrestamoStartStr, fechaPrestamoEndStr, docenteId, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByFechaPrestamoAndDocente/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{docenteId}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndDocente(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Long docenteId, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndDocente(fechaPrestamoStartStr, fechaPrestamoEndStr, docenteId, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}/{page}")
-    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, @PathVariable Integer page) {
-        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, pageable), HttpStatus.OK);
     }
 }

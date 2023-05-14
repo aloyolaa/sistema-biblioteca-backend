@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.DocenteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,8 +54,8 @@ public class DocenteController {
         return new ResponseEntity<>(docenteService.getOneByDni(dni), HttpStatus.OK);
     }
 
-    @GetMapping("/pagination/{page}")
-    public ResponseEntity<Page<Docente>> pagination(@PathVariable Integer page) {
-        return new ResponseEntity<>(docenteService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Docente>> pagination(Pageable pageable) {
+        return new ResponseEntity<>(docenteService.pagination(pageable), HttpStatus.OK);
     }
 }

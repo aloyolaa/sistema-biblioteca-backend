@@ -25,10 +25,12 @@ public class Docente extends BaseEntity {
     @Column(name = "apellido", nullable = false)
     private String apellido;
 
+    @Size(min = 8, message = "{Size.docente.dni}")
     @NotBlank(message = "{NotBlank.docente.dni}")
     @Column(name = "dni", nullable = false)
     private String dni;
 
+    @Size(min = 9, message = "{Size.docente.telefono}")
     @NotBlank(message = "{NotBlank.docente.telefono}")
     @Column(name = "telefono", nullable = false)
     private String telefono;

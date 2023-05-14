@@ -144,6 +144,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         }
         LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
             return prestamoMaterialRepository.paginationByFechaPrestamo(fechaPrestamoStart, fechaPrestamoEnd, pageable);
         } catch (DataAccessException e) {
@@ -159,6 +160,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         }
         LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
             return prestamoMaterialRepository.paginationByFechaPrestamoAndDocente(fechaPrestamoStart, fechaPrestamoEnd, id, pageable);
         } catch (DataAccessException e) {
@@ -174,6 +176,7 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         }
         LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
             return prestamoMaterialRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart, fechaPrestamoEnd, grado, seccion, pageable);
         } catch (DataAccessException e) {

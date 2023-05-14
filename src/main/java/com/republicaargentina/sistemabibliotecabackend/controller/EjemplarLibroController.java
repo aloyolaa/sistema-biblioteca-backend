@@ -5,7 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.service.EjemplarLibroServ
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,13 +59,13 @@ public class EjemplarLibroController {
         return new ResponseEntity<>(ejemplarLibroService.countByLibroAndEstado(codigo), HttpStatus.OK);
     }
 
-    @GetMapping("/pagination/{page}")
-    public ResponseEntity<Page<EjemplarLibro>> pagination(@PathVariable Integer page) {
-        return new ResponseEntity<>(ejemplarLibroService.pagination(PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<EjemplarLibro>> pagination(Pageable pageable) {
+        return new ResponseEntity<>(ejemplarLibroService.pagination(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/paginationByLibro/{codigo}/{page}")
-    public ResponseEntity<Page<EjemplarLibro>> paginationByLibro(@PathVariable String codigo, @PathVariable Integer page) {
-        return new ResponseEntity<>(ejemplarLibroService.paginationByLibro(codigo, PageRequest.of(page, 4)), HttpStatus.OK);
+    @GetMapping("/paginationByLibro/{codigo}")
+    public ResponseEntity<Page<EjemplarLibro>> paginationByLibro(@PathVariable String codigo, Pageable pageable) {
+        return new ResponseEntity<>(ejemplarLibroService.paginationByLibro(codigo, pageable), HttpStatus.OK);
     }
 }
