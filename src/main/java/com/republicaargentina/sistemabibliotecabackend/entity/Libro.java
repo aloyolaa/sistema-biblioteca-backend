@@ -65,4 +65,20 @@ public class Libro extends BaseEntity {
             joinColumns = @JoinColumn(name = "libro_id"),
             inverseJoinColumns = @JoinColumn(name = "autor_id"))
     private Set<Autor> autores = new LinkedHashSet<>();
+
+    public String getAreaNombre() {
+        return this.area.getNombre();
+    }
+
+    public String getCategoriaNombre() {
+        return this.categoria.getNombre();
+    }
+
+    public String getEditorialNombre() {
+        return this.editorial.getNombre();
+    }
+
+    public String getAutoresNombre() {
+        return this.autores.toString();
+    }
 }
