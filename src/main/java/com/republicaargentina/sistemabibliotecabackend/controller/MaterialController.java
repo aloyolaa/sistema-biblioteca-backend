@@ -4,6 +4,7 @@ import com.republicaargentina.sistemabibliotecabackend.entity.Material;
 import com.republicaargentina.sistemabibliotecabackend.service.MaterialService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -77,5 +78,10 @@ public class MaterialController {
     @GetMapping("/paginationByArea/{id}")
     public ResponseEntity<Page<Material>> paginationByArea(@PathVariable Long id, Pageable pageable) {
         return new ResponseEntity<>(materialService.paginationByArea(id, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/export-pdf")
+    public ResponseEntity<Resource> exportPDF() {
+        return materialService.exportPDF();
     }
 }

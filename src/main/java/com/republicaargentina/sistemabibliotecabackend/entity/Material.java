@@ -36,4 +36,8 @@ public class Material extends BaseEntity {
     @JoinColumn(name = "area_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Area area;
+
+    public String getAreaNombre() {
+        return this.area.getNombre();
+    }
 }

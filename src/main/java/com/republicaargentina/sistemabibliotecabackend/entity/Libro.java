@@ -78,7 +78,16 @@ public class Libro extends BaseEntity {
         return this.editorial.getNombre();
     }
 
-    public String getAutoresNombre() {
-        return this.autores.toString();
+    public String getAutoresNombres() {
+        StringBuilder autoresNombres = new StringBuilder();
+        for (Autor autor : this.autores) {
+            autoresNombres.append(autor.getNombre())
+                    .append(" ")
+                    .append(autor.getApellido());
+            if (this.autores.size() > 1) {
+                autoresNombres.append(", ");
+            }
+        }
+        return autoresNombres.toString();
     }
 }

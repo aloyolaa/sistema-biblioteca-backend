@@ -218,7 +218,7 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> exportPDF() {
         try {
-            File file = ResourceUtils.getFile("classpath:reports/reporte_libros.jasper");
+            File file = ResourceUtils.getFile("classpath:reports/libros/reporte_libros.jasper");
             File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();

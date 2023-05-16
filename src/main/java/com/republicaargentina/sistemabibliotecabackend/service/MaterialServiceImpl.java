@@ -5,15 +5,33 @@ import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExcep
 import com.republicaargentina.sistemabibliotecabackend.repository.MaterialRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
@@ -163,5 +181,37 @@ public class MaterialServiceImpl implements MaterialService {
             material.setMedidas(material.getMedidas().toUpperCase());
         }
         return material;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<Resource> exportPDF() {
+        try {
+            File file = ResourceUtils.getFile("classpath:reports/materiales/reporte_materiales.jasper");
+            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("logoColegio", new FileInputStream((logo)));
+            parameters.put("ds", new JRBeanCollectionDataSource(materialRepository.getAll()));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+            StringBuilder stringBuilder = new StringBuilder().append("inventario_materiales");
+            byte[] report = JasperExportManager.exportReportToPdf(jasperPrint);
+            ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
+                    .filename(
+                            stringBuilder
+                                    .append("_")
+                                    .append(LocalDate.now())
+                                    .append(".pdf")
+                                    .toString()
+                    ).build();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentDisposition(contentDisposition);
+            return ResponseEntity.ok().contentLength(report.length)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .headers(httpHeaders).body(new ByteArrayResource(report));
+        } catch (FileNotFoundException | JRException e) {
+            log.error(e.getMessage());
+        }
+        return null;
     }
 }
