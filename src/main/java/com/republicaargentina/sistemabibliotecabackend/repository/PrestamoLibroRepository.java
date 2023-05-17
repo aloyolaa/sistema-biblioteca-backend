@@ -19,8 +19,14 @@ public interface PrestamoLibroRepository extends JpaRepository<PrestamoLibro, Lo
     @Query("select p from PrestamoLibro p where p.docente.dni = ?1 order by p.fechaPrestamo DESC")
     Page<PrestamoLibro> paginationByDocente(String dni, Pageable pageable);
 
-    @Query("select p from PrestamoLibro p where p.grado = ?1 and p.seccion = ?2 order by p.fechaPrestamo")
+    @Query("select p from PrestamoLibro p where p.grado = ?1 and p.seccion = ?2 order by p.fechaPrestamo DESC")
     Page<PrestamoLibro> paginationByGradoAndSeccion(Integer grado, String seccion, Pageable pageable);
+
+    @Query("""
+            select p from PrestamoLibro p
+            where upper(p.descripcion) like upper(concat('%', ?1, '%'))
+            order by p.fechaPrestamo DESC""")
+    Page<PrestamoLibro> paginationByDescripcion(String descripcion, Pageable pageable);
 
     @Query("select p from PrestamoLibro p where p.fechaPrestamo between ?1 and ?2 order by p.fechaPrestamo DESC")
     Page<PrestamoLibro> paginationByFechaPrestamo(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, Pageable pageable);
@@ -36,4 +42,10 @@ public interface PrestamoLibroRepository extends JpaRepository<PrestamoLibro, Lo
             where p.fechaPrestamo between ?1 and ?2 and p.grado = ?3 and p.seccion = ?4
             order by p.fechaPrestamo DESC""")
     Page<PrestamoLibro> paginationByFechaPrestamoAndGradoAndSeccion(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, Integer grado, String seccion, Pageable pageable);
+
+    @Query("""
+            select p from PrestamoLibro p
+            where p.fechaPrestamo between ?1 and ?2 and upper(p.descripcion) like upper(concat('%', ?3, '%'))
+            order by p.fechaPrestamo DESC""")
+    Page<PrestamoLibro> paginationByFechaPrestamoAndDescripcion(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, String descripcion, Pageable pageable);
 }

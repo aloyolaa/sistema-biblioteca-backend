@@ -64,6 +64,11 @@ public class PrestamoMaterialController {
         return new ResponseEntity<>(prestamoMaterialService.paginationByGradoAndSeccion(grado, seccion, pageable), HttpStatus.OK);
     }
 
+    @GetMapping("/paginationByDescripcion/{descripcion}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByDescripcion(@PathVariable String descripcion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByDescripcion(descripcion, pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
     public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
         return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
@@ -77,5 +82,10 @@ public class PrestamoMaterialController {
     @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}")
     public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
         return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamoAndDescripcion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{descripcion}")
+    public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndDescripcion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable String descripcion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr, fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
     }
 }
