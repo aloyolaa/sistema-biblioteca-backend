@@ -19,6 +19,18 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("select l from Libro l where upper(l.codigo) = upper(?1)")
     Optional<Libro> getOneByCodigo(String codigo);
 
+    @Query("select l from Libro l where l.area.id = ?1 order by l.codigo")
+    List<Libro> getAllByArea(Long id);
+
+    @Query("select l from Libro l where l.categoria.id = ?1 order by l.codigo")
+    List<Libro> getAllByCategoria(Long id);
+
+    @Query("select l from Libro l where l.editorial.id = ?1 order by l.codigo")
+    List<Libro> getAllByEditorial(Long id);
+
+    @Query("select l from Libro l inner join l.autores autores where autores.id = ?1 order by l.codigo")
+    List<Libro> getAllByAutor(Long id);
+
     @Query("select l from Libro l order by l.codigo")
     Page<Libro> pagination(Pageable pageable);
 

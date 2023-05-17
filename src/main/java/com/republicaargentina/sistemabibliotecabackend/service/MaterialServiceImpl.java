@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.Material;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.MaterialRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.MaterialReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
+    private final MaterialReportGenerator materialReportGenerator;
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un material con el ID ";
 
     @Override
@@ -213,5 +215,29 @@ public class MaterialServiceImpl implements MaterialService {
             log.error(e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToPdf() {
+        return materialReportGenerator.exportToPdf(materialRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToXls() {
+        return materialReportGenerator.exportToXls(materialRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAreaToPdf(Long id) {
+        return materialReportGenerator.exportToPdf(materialRepository.getAllByArea(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAreaToXls(Long id) {
+        return materialReportGenerator.exportToXls(materialRepository.getAllByArea(id));
     }
 }

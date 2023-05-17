@@ -30,4 +30,12 @@ public interface EjemplarMaterialService {
     void cambiarPrestado(Long id, Boolean prestado);
 
     EjemplarMaterial cambiarLetras(EjemplarMaterial ejemplarMaterial);
+
+    byte[] exportAllToPdf();
+
+    byte[] exportAllToXls();
+
+    byte[] exportByMaterialToPdf(Long id);
+
+    byte[] exportByMaterialToXls(Long id);
 }

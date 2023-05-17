@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.EjemplarLibro;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.EjemplarLibroRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.EjemplarLibroReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class EjemplarLibroServiceImpl implements EjemplarLibroService {
     private final EjemplarLibroRepository ejemplarLibroRepository;
     private final LibroService libroService;
+    private final EjemplarLibroReportGenerator ejemplarLibroReportGenerator;
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un ejemplar del libro con el ID ";
 
     @Override
@@ -159,5 +161,29 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
         ejemplarLibro.setEstado(ejemplarLibro.getEstado());
         ejemplarLibro.setObservaciones(ejemplarLibro.getObservaciones().toUpperCase());
         return ejemplarLibro;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToPdf() {
+        return ejemplarLibroReportGenerator.exportToPdf(ejemplarLibroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToXls() {
+        return ejemplarLibroReportGenerator.exportToXls(ejemplarLibroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByLibroToPdf(Long id) {
+        return ejemplarLibroReportGenerator.exportToPdf(ejemplarLibroRepository.getAllByLibro(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByLibroToXls(Long id) {
+        return ejemplarLibroReportGenerator.exportToXls(ejemplarLibroRepository.getAllByLibro(id));
     }
 }

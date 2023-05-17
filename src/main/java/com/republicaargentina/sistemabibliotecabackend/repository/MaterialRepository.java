@@ -19,6 +19,9 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query("select m from Material m where upper(m.codigo) = upper(?1)")
     Optional<Material> getOneByCodigo(String codigo);
 
+    @Query("select m from Material m where m.area.id = ?1 order by m.codigo")
+    List<Material> getAllByArea(Long id);
+
     @Query("select m from Material m order by m.codigo")
     Page<Material> pagination(Pageable pageable);
 

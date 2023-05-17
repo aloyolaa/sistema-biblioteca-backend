@@ -38,4 +38,12 @@ public class EjemplarLibro extends BaseEntity {
         this.prestado = false;
         this.observaciones = "";
     }
+
+    public String getCodigo() {
+        return this.libro.getCodigo() + "-" + this.numero;
+    }
+
+    public String getTitulo() {
+        return this.libro.getTitulo();
+    }
 }

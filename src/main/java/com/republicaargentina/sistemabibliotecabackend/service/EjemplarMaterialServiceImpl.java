@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.EjemplarMaterial;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.EjemplarMaterialRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.EjemplarMaterialReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
     private final EjemplarMaterialRepository ejemplarMaterialRepository;
     private final MaterialService materialService;
+    private final EjemplarMaterialReportGenerator ejemplarMaterialReportGenerator;
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un ejemplar del material con el ID ";
 
     @Override
@@ -159,5 +161,29 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
         ejemplarMaterial.setEstado(ejemplarMaterial.getEstado());
         ejemplarMaterial.setObservaciones(ejemplarMaterial.getObservaciones().toUpperCase());
         return ejemplarMaterial;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToPdf() {
+        return ejemplarMaterialReportGenerator.exportToPdf(ejemplarMaterialRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToXls() {
+        return ejemplarMaterialReportGenerator.exportToXls(ejemplarMaterialRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByMaterialToPdf(Long id) {
+        return ejemplarMaterialReportGenerator.exportToPdf(ejemplarMaterialRepository.getAllByMaterial(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByMaterialToXls(Long id) {
+        return ejemplarMaterialReportGenerator.exportToXls(ejemplarMaterialRepository.getAllByMaterial(id));
     }
 }

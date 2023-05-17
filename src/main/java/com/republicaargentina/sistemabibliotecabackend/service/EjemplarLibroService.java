@@ -30,4 +30,12 @@ public interface EjemplarLibroService {
     void cambiarPrestado(Long id, Boolean prestado);
 
     EjemplarLibro cambiarLetras(EjemplarLibro ejemplarLibro);
+
+    byte[] exportAllToPdf();
+
+    byte[] exportAllToXls();
+
+    byte[] exportByLibroToPdf(Long id);
+
+    byte[] exportByLibroToXls(Long id);
 }

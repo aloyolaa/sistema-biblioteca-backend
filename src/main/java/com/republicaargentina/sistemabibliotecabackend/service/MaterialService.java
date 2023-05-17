@@ -36,4 +36,12 @@ public interface MaterialService {
     Material cambiarLetras(Material material);
 
     ResponseEntity<Resource> exportPDF();
+
+    byte[] exportAllToPdf();
+
+    byte[] exportAllToXls();
+
+    byte[] exportByAreaToPdf(Long id);
+
+    byte[] exportByAreaToXls(Long id);
 }

@@ -19,6 +19,9 @@ public interface EjemplarLibroRepository extends JpaRepository<EjemplarLibro, Lo
     @Query("select e from EjemplarLibro e where upper(e.libro.codigo) = upper(?1) and e.estado != 'MALO' and e.prestado = false order by e.numero limit ?2")
     List<EjemplarLibro> getAllByLibroAndEstado(String codigo, Integer cantidad);
 
+    @Query("select e from EjemplarLibro e where e.libro.id = ?1 order by e.libro.codigo, e.numero")
+    List<EjemplarLibro> getAllByLibro(Long id);
+
     @Query("select count(e) from EjemplarLibro e where upper(e.libro.codigo) = upper(?1)")
     long countByLibro(String codigo);
 

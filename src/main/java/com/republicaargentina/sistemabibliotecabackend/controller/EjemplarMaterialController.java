@@ -6,10 +6,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -67,5 +67,45 @@ public class EjemplarMaterialController {
     @GetMapping("/paginationByMaterial/{codigo}")
     public ResponseEntity<Page<EjemplarMaterial>> paginationByMaterial(@PathVariable String codigo, Pageable pageable) {
         return new ResponseEntity<>(ejemplarMaterialService.paginationByMaterial(codigo, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/export-all-pdf")
+    public ResponseEntity<byte[]> exportAllToPdf() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("ejemplares_materiales", "ejemplares_materiales_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(ejemplarMaterialService.exportAllToPdf());
+    }
+
+    @GetMapping("/export-all-xls")
+    public ResponseEntity<byte[]> exportAllToXls() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("ejemplares_materiales_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(ejemplarMaterialService.exportAllToXls());
+    }
+
+    @GetMapping("/export-by-material-pdf/{id}")
+    public ResponseEntity<byte[]> exportByMaterialToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("ejemplares_materiales_por_material", "ejemplares_materiales_por_material_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(ejemplarMaterialService.exportByMaterialToPdf(id));
+    }
+
+    @GetMapping("/export-by-material-xls/{id}")
+    public ResponseEntity<byte[]> exportByMaterialToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("ejemplares_materiales_por_material_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(ejemplarMaterialService.exportByMaterialToXls(id));
     }
 }

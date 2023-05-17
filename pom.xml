@@ -53,6 +53,11 @@
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>6.20.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>

@@ -38,4 +38,12 @@ public class EjemplarMaterial extends BaseEntity {
         this.prestado = false;
         this.observaciones = "";
     }
+
+    public String getCodigo() {
+        return this.material.getCodigo() + "-" + this.numero;
+    }
+
+    public String getNombre() {
+        return this.material.getNombre();
+    }
 }

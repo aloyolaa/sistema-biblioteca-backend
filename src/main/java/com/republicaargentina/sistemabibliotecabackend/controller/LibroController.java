@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -95,8 +95,108 @@ public class LibroController {
         return new ResponseEntity<>(libroService.paginationByAutor(id, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/export-pdf")
+    @GetMapping("/export-pdf-1")
     public ResponseEntity<Resource> exportPDF() {
         return libroService.exportPDF();
+    }
+
+    @GetMapping("/export-all-pdf")
+    public ResponseEntity<byte[]> exportAllToPdf() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inventario_libros", "inventario_libros_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(libroService.exportAllToPdf());
+    }
+
+    @GetMapping("/export-all-xls")
+    public ResponseEntity<byte[]> exportAllToXls() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("inventario_libros_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(libroService.exportAllToXls());
+    }
+
+    @GetMapping("/export-by-area-pdf/{id}")
+    public ResponseEntity<byte[]> exportByAreaToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inventario_libros_por_area", "inventario_libros_por_area_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(libroService.exportByAreaToPdf(id));
+    }
+
+    @GetMapping("/export-by-area-xls/{id}")
+    public ResponseEntity<byte[]> exportByAreaToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("inventario_libros_por_area_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(libroService.exportByAreaToXls(id));
+    }
+
+    @GetMapping("/export-by-categoria-pdf/{id}")
+    public ResponseEntity<byte[]> exportByCategoriaToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inventario_libros_por_cateegoria", "inventario_libros_por_categoria_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(libroService.exportByCategoriaToPdf(id));
+    }
+
+    @GetMapping("/export-by-categoria-xls/{id}")
+    public ResponseEntity<byte[]> exportByCategoriaToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("inventario_libros_por_categoria_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(libroService.exportByCategoriaToXls(id));
+    }
+
+    @GetMapping("/export-by-editorial-pdf/{id}")
+    public ResponseEntity<byte[]> exportByEditorialToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inventario_libros_por_editorial", "inventario_libros_por_editorial_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(libroService.exportByEditorialToPdf(id));
+    }
+
+    @GetMapping("/export-by-editorial-xls/{id}")
+    public ResponseEntity<byte[]> exportByEditorialToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("inventario_libros_por_editorial_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(libroService.exportByEditorialToXls(id));
+    }
+
+    @GetMapping("/export-by-autor-pdf/{id}")
+    public ResponseEntity<byte[]> exportByAutorToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inventario_libros_por_autor", "inventario_libros_por_autor_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(libroService.exportByAutorToPdf(id));
+    }
+
+    @GetMapping("/export-by-autor-xls/{id}")
+    public ResponseEntity<byte[]> exportByAutorToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("inventario_libros_por_autor_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(libroService.exportByAutorToXls(id));
     }
 }

@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.Libro;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.LibroRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.LibroReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LibroServiceImpl implements LibroService {
     private final LibroRepository libroRepository;
+    private final LibroReportGenerator libroReportGenerator;
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un libro con el ID ";
 
     @Override
@@ -244,5 +246,65 @@ public class LibroServiceImpl implements LibroService {
             log.error(e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToPdf() {
+        return libroReportGenerator.exportToPdf(libroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportAllToXls() {
+        return libroReportGenerator.exportToXls(libroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAreaToPdf(Long id) {
+        return libroReportGenerator.exportToPdf(libroRepository.getAllByArea(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAreaToXls(Long id) {
+        return libroReportGenerator.exportToXls(libroRepository.getAllByArea(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByCategoriaToPdf(Long id) {
+        return libroReportGenerator.exportToPdf(libroRepository.getAllByCategoria(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByCategoriaToXls(Long id) {
+        return libroReportGenerator.exportToXls(libroRepository.getAllByCategoria(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByEditorialToPdf(Long id) {
+        return libroReportGenerator.exportToPdf(libroRepository.getAllByEditorial(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByEditorialToXls(Long id) {
+        return libroReportGenerator.exportToXls(libroRepository.getAllByEditorial(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAutorToPdf(Long id) {
+        return libroReportGenerator.exportToPdf(libroRepository.getAllByAutor(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByAutorToXls(Long id) {
+        return libroReportGenerator.exportToXls(libroRepository.getAllByAutor(id));
     }
 }

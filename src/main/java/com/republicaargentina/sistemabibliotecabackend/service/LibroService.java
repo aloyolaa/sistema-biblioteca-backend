@@ -42,4 +42,24 @@ public interface LibroService {
     Libro cambiarLetras(Libro libro);
 
     ResponseEntity<Resource> exportPDF();
+
+    byte[] exportAllToPdf();
+
+    byte[] exportAllToXls();
+
+    byte[] exportByAreaToPdf(Long id);
+
+    byte[] exportByAreaToXls(Long id);
+
+    byte[] exportByCategoriaToPdf(Long id);
+
+    byte[] exportByCategoriaToXls(Long id);
+
+    byte[] exportByEditorialToPdf(Long id);
+
+    byte[] exportByEditorialToXls(Long id);
+
+    byte[] exportByAutorToPdf(Long id);
+
+    byte[] exportByAutorToXls(Long id);
 }
