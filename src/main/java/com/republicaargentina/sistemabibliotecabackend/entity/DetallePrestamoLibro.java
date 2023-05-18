@@ -16,4 +16,16 @@ public class DetallePrestamoLibro extends BaseEntity {
     @JoinColumn(name = "ejemplar_libro_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private EjemplarLibro ejemplarLibro;
+
+    public String getCodigo() {
+        return this.ejemplarLibro.getLibro().getCodigo() + "-" + this.ejemplarLibro.getNumero();
+    }
+
+    public String getTitulo() {
+        return this.ejemplarLibro.getLibro().getTitulo();
+    }
+
+    public String getEstado() {
+        return this.ejemplarLibro.getEstado();
+    }
 }

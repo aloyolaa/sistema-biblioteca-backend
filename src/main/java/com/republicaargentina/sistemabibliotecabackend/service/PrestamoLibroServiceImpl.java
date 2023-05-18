@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.PrestamoLibro;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.PrestamoLibroRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.PrestamoLibroReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PrestamoLibroServiceImpl implements PrestamoLibroService {
     private final PrestamoLibroRepository prestamoLibroRepository;
     private final EjemplarLibroService ejemplarLibroService;
+    private final PrestamoLibroReportGenerator prestamoLibroReportGenerator;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String DATETIME_MESSAGE = "Ambas fechas son requeridas para el filtro";
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de libros con el ID ";
@@ -189,5 +191,29 @@ public class PrestamoLibroServiceImpl implements PrestamoLibroService {
         prestamoLibro.setDescripcion(prestamoLibro.getDescripcion().toUpperCase());
         prestamoLibro.setObservaciones(prestamoLibro.getObservaciones().toUpperCase());
         return prestamoLibro;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportToPdf() {
+        return prestamoLibroReportGenerator.exportToPdf(prestamoLibroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportToXls() {
+        return prestamoLibroReportGenerator.exportToXls(prestamoLibroRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByPrestamoLibroToPdf(Long id) {
+        return prestamoLibroReportGenerator.exportByPrestamoLibroToPdf(prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByPrestamoLibroToXls(Long id) {
+        return prestamoLibroReportGenerator.exportByPrestamoLibroToXls(prestamoLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
     }
 }

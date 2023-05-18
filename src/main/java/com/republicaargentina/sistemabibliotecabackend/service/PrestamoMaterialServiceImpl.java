@@ -3,6 +3,7 @@ package com.republicaargentina.sistemabibliotecabackend.service;
 import com.republicaargentina.sistemabibliotecabackend.entity.PrestamoMaterial;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.PrestamoMaterialRepository;
+import com.republicaargentina.sistemabibliotecabackend.util.PrestamoMaterialReportGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     private final PrestamoMaterialRepository prestamoMaterialRepository;
     private final EjemplarMaterialService ejemplarMaterialService;
+    private final PrestamoMaterialReportGenerator prestamoMaterialReportGenerator;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un préstamo de materiales con el ID ";
     private static final String DATETIME_MESSAGE = "Ambas fechas son requeridas para el filtro";
@@ -189,5 +191,17 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         prestamoMaterial.setDescripcion(prestamoMaterial.getDescripcion().toUpperCase());
         prestamoMaterial.setObservaciones(prestamoMaterial.getObservaciones().toUpperCase());
         return prestamoMaterial;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportToPdf(Long id) {
+        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportToXls(Long id) {
+        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
     }
 }

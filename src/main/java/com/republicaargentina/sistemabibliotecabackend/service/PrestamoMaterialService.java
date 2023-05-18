@@ -32,4 +32,8 @@ public interface PrestamoMaterialService {
     Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable);
 
     PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial);
+
+    byte[] exportToPdf(Long id);
+
+    byte[] exportToXls(Long id);
 }
