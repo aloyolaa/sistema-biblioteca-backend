@@ -140,6 +140,16 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByDescripcion(String descripcion, Pageable pageable) {
+        try {
+            return prestamoMaterialRepository.paginationByDescripcion(descripcion, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException(DATETIME_MESSAGE);
@@ -181,6 +191,22 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
             return prestamoMaterialRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart, fechaPrestamoEnd, grado, seccion, pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, String descripcion, Pageable pageable) {
+        if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
+            throw new IllegalArgumentException(DATETIME_MESSAGE);
+        }
+        LocalDateTime fechaPrestamoStart = LocalDateTime.parse(fechaPrestamoStartStr, dateTimeFormatter);
+        LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
+        fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
+        try {
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStart, fechaPrestamoEnd, descripcion, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

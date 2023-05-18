@@ -22,6 +22,12 @@ public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMateri
     @Query("select p from PrestamoMaterial p where p.grado = ?1 and p.seccion = ?2 order by p.fechaPrestamo")
     Page<PrestamoMaterial> paginationByGradoAndSeccion(Integer grado, String seccion, Pageable pageable);
 
+    @Query("""
+            select p from PrestamoMaterial p
+            where upper(p.descripcion) like upper(concat('%', ?1, '%'))
+            order by p.fechaPrestamo DESC""")
+    Page<PrestamoMaterial> paginationByDescripcion(String descripcion, Pageable pageable);
+
     @Query("select p from PrestamoMaterial p where p.fechaPrestamo between ?1 and ?2 order by p.fechaPrestamo DESC")
     Page<PrestamoMaterial> paginationByFechaPrestamo(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, Pageable pageable);
 
@@ -36,4 +42,10 @@ public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMateri
             where p.fechaPrestamo between ?1 and ?2 and p.grado = ?3 and p.seccion = ?4
             order by p.fechaPrestamo DESC""")
     Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, Integer grado, String seccion, Pageable pageable);
+
+    @Query("""
+            select p from PrestamoMaterial p
+            where p.fechaPrestamo between ?1 and ?2 and upper(p.descripcion) like upper(concat('%', ?3, '%'))
+            order by p.fechaPrestamo DESC""")
+    Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, String descripcion, Pageable pageable);
 }

@@ -64,6 +64,11 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.paginationByGradoAndSeccion(grado, seccion, pageable), HttpStatus.OK);
     }
 
+    @GetMapping("/paginationByDescripcion/{descripcion}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByDescripcion(@PathVariable String descripcion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByDescripcion(descripcion, pageable), HttpStatus.OK);
+    }
+
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
     public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
         return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
@@ -77,6 +82,11 @@ public class PrestamoLibroController {
     @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}")
     public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
         return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/paginationByFechaPrestamoAndDescripcion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{descripcion}")
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDescripcion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable String descripcion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr, fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/export-pdf")
