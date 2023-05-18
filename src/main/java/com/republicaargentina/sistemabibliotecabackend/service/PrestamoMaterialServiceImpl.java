@@ -221,13 +221,25 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] exportToPdf(Long id) {
-        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    public byte[] exportToPdf() {
+        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.getAll());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] exportToXls(Long id) {
-        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    public byte[] exportToXls() {
+        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.getAll());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByPrestamoMaterialToPdf(Long id) {
+        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToPdf(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByPrestamoMaterialToXls(Long id) {
+        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToXls(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
     }
 }

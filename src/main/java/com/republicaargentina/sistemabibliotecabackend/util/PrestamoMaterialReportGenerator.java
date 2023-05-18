@@ -17,12 +17,53 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Service
 public class PrestamoMaterialReportGenerator {
-    public JasperPrint getReport(PrestamoMaterial prestamoMaterial) {
+    public JasperPrint getReport(List<PrestamoMaterial> prestamosMateriales) {
+        try {
+            File file = ResourceUtils.getFile("classpath:reports/prestamos_materiales/reporte_prestamos_materiales.jasper");
+            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("logoColegio", new FileInputStream((logo)));
+            parameters.put("ds", new JRBeanCollectionDataSource(prestamosMateriales));
+            return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        } catch (FileNotFoundException | JRException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    public byte[] exportToPdf(List<PrestamoMaterial> prestamosMateriales) {
+        try {
+            return JasperExportManager.exportReportToPdf(getReport(prestamosMateriales));
+        } catch (JRException e) {
+            log.error(e.getMessage());
+        }
+        return new byte[0];
+    }
+
+    public byte[] exportToXls(List<PrestamoMaterial> prestamosMateriales) {
+        try {
+            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+            SimpleOutputStreamExporterOutput output = new SimpleOutputStreamExporterOutput(byteArray);
+            JRXlsExporter exporter = new JRXlsExporter();
+            exporter.setExporterInput(new SimpleExporterInput(getReport(prestamosMateriales)));
+            exporter.setExporterOutput(output);
+            exporter.exportReport();
+            output.close();
+            return byteArray.toByteArray();
+        } catch (JRException e) {
+            log.error(e.getMessage());
+        }
+        return new byte[0];
+    }
+
+    public JasperPrint getReportByPrestamoMaterial(PrestamoMaterial prestamoMaterial) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy / MM / dd HH:mm");
         try {
             File file = ResourceUtils.getFile("classpath:reports/prestamos_materiales/reporte_prestamo_materiales.jasper");
@@ -43,21 +84,21 @@ public class PrestamoMaterialReportGenerator {
         return null;
     }
 
-    public byte[] exportToPdf(PrestamoMaterial prestamoMaterial) {
+    public byte[] exportByPrestamoMaterialToPdf(PrestamoMaterial prestamoMaterial) {
         try {
-            return JasperExportManager.exportReportToPdf(getReport(prestamoMaterial));
+            return JasperExportManager.exportReportToPdf(getReportByPrestamoMaterial(prestamoMaterial));
         } catch (JRException e) {
             log.error(e.getMessage());
         }
         return new byte[0];
     }
 
-    public byte[] exportToXls(PrestamoMaterial prestamoMaterial) {
+    public byte[] exportByPrestamoMaterialToXls(PrestamoMaterial prestamoMaterial) {
         try {
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             SimpleOutputStreamExporterOutput output = new SimpleOutputStreamExporterOutput(byteArray);
             JRXlsExporter exporter = new JRXlsExporter();
-            exporter.setExporterInput(new SimpleExporterInput(getReport(prestamoMaterial)));
+            exporter.setExporterInput(new SimpleExporterInput(getReportByPrestamoMaterial(prestamoMaterial)));
             exporter.setExporterOutput(output);
             exporter.exportReport();
             output.close();

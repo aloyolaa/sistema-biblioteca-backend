@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,5 +58,23 @@ public class PrestamoMaterial extends BaseEntity {
     public void prePersist() {
         this.activo = true;
         this.observaciones = "";
+    }
+
+    public String getNombreDocente() {
+        return this.docente.getNombre() + " " + this.docente.getApellido();
+    }
+
+    public String getAula() {
+        return this.grado + "° \"" + this.seccion + "\"";
+    }
+
+    public String getPrestamo() {
+        return DateTimeFormatter.ofPattern("yyyy / MM / dd HH:mm").format(this.fechaPrestamo);
+    }
+
+    public String getDevolucion() {
+        return this.fechaDevolucion == null
+                ? null
+                : DateTimeFormatter.ofPattern("yyyy / MM / dd HH:mm").format(this.fechaDevolucion);
     }
 }

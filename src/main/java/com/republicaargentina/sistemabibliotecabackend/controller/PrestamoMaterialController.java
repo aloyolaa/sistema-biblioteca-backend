@@ -88,17 +88,37 @@ public class PrestamoMaterialController {
     public ResponseEntity<Page<PrestamoMaterial>> paginationByFechaPrestamoAndDescripcion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable String descripcion, Pageable pageable) {
         return new ResponseEntity<>(prestamoMaterialService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr, fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
     }
-    
+
+    @GetMapping("/export-pdf")
+    public ResponseEntity<byte[]> exportToPdf() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("prestamos_materiales", "prestamos_materiales_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(prestamoMaterialService.exportToPdf());
+    }
+
+    @GetMapping("/export-xls")
+    public ResponseEntity<byte[]> exportToXls() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("prestamos_materiales_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(prestamoMaterialService.exportToXls());
+    }
+
     @GetMapping("/export-pdf/{id}")
-    public ResponseEntity<byte[]> exportToPdf(@PathVariable Long id) {
+    public ResponseEntity<byte[]> exportByPrestamoLibroToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("prestamo_materiales", "prestamo_materiales_" + LocalDate.now() + ".pdf");
-        return ResponseEntity.ok().headers(headers).body(prestamoMaterialService.exportToPdf(id));
+        return ResponseEntity.ok().headers(headers).body(prestamoMaterialService.exportByPrestamoMaterialToPdf(id));
     }
 
     @GetMapping("/export-xls/{id}")
-    public ResponseEntity<byte[]> exportToXls(@PathVariable Long id) {
+    public ResponseEntity<byte[]> exportByPrestamoLibroToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
         var contentDisposition = ContentDisposition.builder("attachment")
@@ -106,6 +126,6 @@ public class PrestamoMaterialController {
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(prestamoMaterialService.exportToXls(id));
+                .body(prestamoMaterialService.exportByPrestamoMaterialToXls(id));
     }
 }

@@ -37,7 +37,11 @@ public interface PrestamoMaterialService {
 
     PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial);
 
-    byte[] exportToPdf(Long id);
+    byte[] exportToPdf();
 
-    byte[] exportToXls(Long id);
+    byte[] exportToXls();
+
+    byte[] exportByPrestamoMaterialToPdf(Long id);
+
+    byte[] exportByPrestamoMaterialToXls(Long id);
 }
