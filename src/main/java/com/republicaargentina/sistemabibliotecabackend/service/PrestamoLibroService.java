@@ -37,11 +37,19 @@ public interface PrestamoLibroService {
 
     PrestamoLibro cambiarLetras(PrestamoLibro prestamoLibro);
 
-    byte[] exportToPdf();
+    byte[] exportAllToPdf();
 
-    byte[] exportToXls();
+    byte[] exportAllToXls();
 
     byte[] exportByPrestamoLibroToPdf(Long id);
 
     byte[] exportByPrestamoLibroToXls(Long id);
+
+    byte[] exportByDocenteToPdf(Long id);
+
+    byte[] exportByDocenteToXls(Long id);
+
+    byte[] exportByGradoAndSeccionToPdf(Integer grado, String seccion);
+
+    byte[] exportByGradoAndSeccionToXls(Integer grado, String seccion);
 }

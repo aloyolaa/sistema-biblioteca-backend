@@ -25,8 +25,8 @@ import java.util.Map;
 public class PrestamoMaterialReportGenerator {
     public JasperPrint getReport(List<PrestamoMaterial> prestamosMateriales) {
         try {
-            File file = ResourceUtils.getFile("classpath:reports/prestamos_materiales/reporte_prestamos_materiales.jasper");
-            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
+            File file = ResourceUtils.getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamos_materiales.jasper");
+            File logo = ResourceUtils.getFile("src/main/resources/img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoColegio", new FileInputStream((logo)));
@@ -66,8 +66,8 @@ public class PrestamoMaterialReportGenerator {
     public JasperPrint getReportByPrestamoMaterial(PrestamoMaterial prestamoMaterial) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy / MM / dd HH:mm");
         try {
-            File file = ResourceUtils.getFile("classpath:reports/prestamos_materiales/reporte_prestamo_materiales.jasper");
-            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
+            File file = ResourceUtils.getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamo_materiales.jasper");
+            File logo = ResourceUtils.getFile("src/main/resources/img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoColegio", new FileInputStream((logo)));

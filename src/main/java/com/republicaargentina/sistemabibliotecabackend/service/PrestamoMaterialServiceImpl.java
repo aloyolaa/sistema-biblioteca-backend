@@ -221,13 +221,13 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] exportToPdf() {
+    public byte[] exportAllToPdf() {
         return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.getAll());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public byte[] exportToXls() {
+    public byte[] exportAllToXls() {
         return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.getAll());
     }
 
@@ -241,5 +241,29 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional(readOnly = true)
     public byte[] exportByPrestamoMaterialToXls(Long id) {
         return prestamoMaterialReportGenerator.exportByPrestamoMaterialToXls(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByDocenteToPdf(Long id) {
+        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.getAllByDocente(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByDocenteToXls(Long id) {
+        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.getAllByDocente(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByGradoAndSeccionToPdf(Integer grado, String seccion) {
+        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public byte[] exportByGradoAndSeccionToXls(Integer grado, String seccion) {
+        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
     }
 }

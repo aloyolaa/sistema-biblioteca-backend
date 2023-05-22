@@ -89,16 +89,16 @@ public class PrestamoLibroController {
         return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr, fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/export-pdf")
-    public ResponseEntity<byte[]> exportToPdf() {
+    @GetMapping("/export-all-pdf")
+    public ResponseEntity<byte[]> exportAllToPdf() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("prestamos_libros", "prestamos_libros_" + LocalDate.now() + ".pdf");
-        return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportToPdf());
+        return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportAllToPdf());
     }
 
-    @GetMapping("/export-xls")
-    public ResponseEntity<byte[]> exportToXls() {
+    @GetMapping("/export-all-xls")
+    public ResponseEntity<byte[]> exportAllToXls() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
         var contentDisposition = ContentDisposition.builder("attachment")
@@ -106,10 +106,10 @@ public class PrestamoLibroController {
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(prestamoLibroService.exportToXls());
+                .body(prestamoLibroService.exportAllToXls());
     }
 
-    @GetMapping("/export-pdf/{id}")
+    @GetMapping("/export-by-prestamo-pdf/{id}")
     public ResponseEntity<byte[]> exportByPrestamoLibroToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -117,7 +117,7 @@ public class PrestamoLibroController {
         return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportByPrestamoLibroToPdf(id));
     }
 
-    @GetMapping("/export-xls/{id}")
+    @GetMapping("/export-by-prestamo-xls/{id}")
     public ResponseEntity<byte[]> exportByPrestamoLibroToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
@@ -127,5 +127,45 @@ public class PrestamoLibroController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(prestamoLibroService.exportByPrestamoLibroToXls(id));
+    }
+
+    @GetMapping("/export-by-docente-pdf/{id}")
+    public ResponseEntity<byte[]> exportByDocenteToPdf(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("prestamos_libros_por_docente", "prestamo_libros_por_docente_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportByDocenteToPdf(id));
+    }
+
+    @GetMapping("/export-by-docente-xls/{id}")
+    public ResponseEntity<byte[]> exportByDocenteToXls(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("prestamos_libros_por_docente_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(prestamoLibroService.exportByDocenteToXls(id));
+    }
+
+    @GetMapping("/export-by-grado-seccion-pdf/{grado}/{seccion}")
+    public ResponseEntity<byte[]> exportByGradoAndSeccionToPdf(@PathVariable Integer grado, @PathVariable String seccion) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("prestamos_libros_por_grado_seccion", "prestamo_libros_por_grado_seccion_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportByGradoAndSeccionToPdf(grado, seccion));
+    }
+
+    @GetMapping("/export-by-grado-seccion-xls/{grado}/{seccion}")
+    public ResponseEntity<byte[]> exportByGradoAndSeccionToXls(@PathVariable Integer grado, @PathVariable String seccion) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+        var contentDisposition = ContentDisposition.builder("attachment")
+                .filename("prestamos_libros_por_grado_seccion_" + LocalDate.now() + ".xls").build();
+        headers.setContentDisposition(contentDisposition);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(prestamoLibroService.exportByGradoAndSeccionToXls(grado, seccion));
     }
 }

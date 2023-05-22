@@ -37,11 +37,19 @@ public interface PrestamoMaterialService {
 
     PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial);
 
-    byte[] exportToPdf();
+    byte[] exportAllToPdf();
 
-    byte[] exportToXls();
+    byte[] exportAllToXls();
 
     byte[] exportByPrestamoMaterialToPdf(Long id);
 
     byte[] exportByPrestamoMaterialToXls(Long id);
+
+    byte[] exportByDocenteToPdf(Long id);
+
+    byte[] exportByDocenteToXls(Long id);
+
+    byte[] exportByGradoAndSeccionToPdf(Integer grado, String seccion);
+
+    byte[] exportByGradoAndSeccionToXls(Integer grado, String seccion);
 }

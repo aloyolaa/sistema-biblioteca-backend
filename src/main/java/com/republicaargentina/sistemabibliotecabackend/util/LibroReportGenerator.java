@@ -24,8 +24,8 @@ import java.util.Map;
 public class LibroReportGenerator {
     public JasperPrint getReport(List<Libro> libros) {
         try {
-            File file = ResourceUtils.getFile("classpath:reports/libros/reporte_libros.jasper");
-            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
+            File file = ResourceUtils.getFile("src/main/resources/reports/libros/reporte_libros.jasper");
+            File logo = ResourceUtils.getFile("src/main/resources/img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoColegio", new FileInputStream((logo)));

@@ -13,13 +13,22 @@ public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMateri
     @Query("select p from PrestamoMaterial p order by p.fechaPrestamo DESC")
     List<PrestamoMaterial> getAll();
 
+    @Query("select p from PrestamoMaterial p where p.docente.id = ?1 order by p.fechaPrestamo DESC")
+    List<PrestamoMaterial> getAllByDocente(Long id);
+
+    @Query("""
+            select p from PrestamoMaterial p
+            where p.grado = ?1 and upper(p.seccion) = upper(?2)
+            order by p.fechaPrestamo DESC""")
+    List<PrestamoMaterial> getAllByGradoAndSeccion(Integer grado, String seccion);
+
     @Query("select p from PrestamoMaterial p order by p.fechaPrestamo DESC")
     Page<PrestamoMaterial> pagination(Pageable pageable);
 
     @Query("select p from PrestamoMaterial p where p.docente.dni = ?1 order by p.fechaPrestamo DESC")
     Page<PrestamoMaterial> paginationByDocente(String dni, Pageable pageable);
 
-    @Query("select p from PrestamoMaterial p where p.grado = ?1 and p.seccion = ?2 order by p.fechaPrestamo")
+    @Query("select p from PrestamoMaterial p where p.grado = ?1 and upper(p.seccion) = upper(?2) order by p.fechaPrestamo")
     Page<PrestamoMaterial> paginationByGradoAndSeccion(Integer grado, String seccion, Pageable pageable);
 
     @Query("""
@@ -39,7 +48,7 @@ public interface PrestamoMaterialRepository extends JpaRepository<PrestamoMateri
 
     @Query("""
             select p from PrestamoMaterial p
-            where p.fechaPrestamo between ?1 and ?2 and p.grado = ?3 and p.seccion = ?4
+            where p.fechaPrestamo between ?1 and ?2 and p.grado = ?3 and upper(p.seccion) = upper(?4)
             order by p.fechaPrestamo DESC""")
     Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(LocalDateTime fechaPrestamoStart, LocalDateTime fechaPrestamoEnd, Integer grado, String seccion, Pageable pageable);
 
