@@ -1,5 +1,8 @@
 package com.republicaargentina.sistemabibliotecabackend.service;
 
+import com.republicaargentina.sistemabibliotecabackend.entity.Usuario;
+import com.republicaargentina.sistemabibliotecabackend.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,16 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
+    private final UsuarioRepository usuarioRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (!username.equals("admin")) {
-            throw new UsernameNotFoundException(String.format("Username %s no existe en el sistema!", username));
-        }
+        Usuario usuario = usuarioRepository.getOneByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s no existe en el sistema!", username)));
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new User(username,
-                "$2a$10$wWcuBG450oGutwwO9KJVneG/7BJDa/yGdJ0Bu7kL2MfhnRCpGGJIu",
+        return new User(usuario.getUsername(),
+                usuario.getPassword(),
                 true,
                 true,
                 true,

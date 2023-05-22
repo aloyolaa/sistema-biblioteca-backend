@@ -18,6 +18,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PrestamoLibroController {
     private final PrestamoLibroService prestamoLibroService;
+    private static final String XLS_CONTENT_TYPE = "Content-Type";
+    private static final String XLS_CONTENT_TYPE_VALUE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8";
+    private static final String XLS_ATTACHMENT = "attachment";
 
     @GetMapping("/")
     public ResponseEntity<List<PrestamoLibro>> getAll() {
@@ -100,8 +103,8 @@ public class PrestamoLibroController {
     @GetMapping("/export-all-xls")
     public ResponseEntity<byte[]> exportAllToXls() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("prestamos_libros_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -120,8 +123,8 @@ public class PrestamoLibroController {
     @GetMapping("/export-by-prestamo-xls/{id}")
     public ResponseEntity<byte[]> exportByPrestamoLibroToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("prestamo_libros_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -140,8 +143,8 @@ public class PrestamoLibroController {
     @GetMapping("/export-by-docente-xls/{id}")
     public ResponseEntity<byte[]> exportByDocenteToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("prestamos_libros_por_docente_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -160,8 +163,8 @@ public class PrestamoLibroController {
     @GetMapping("/export-by-grado-seccion-xls/{grado}/{seccion}")
     public ResponseEntity<byte[]> exportByGradoAndSeccionToXls(@PathVariable Integer grado, @PathVariable String seccion) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("prestamos_libros_por_grado_seccion_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()

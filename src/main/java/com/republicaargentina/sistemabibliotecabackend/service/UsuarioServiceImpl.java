@@ -1,6 +1,5 @@
 package com.republicaargentina.sistemabibliotecabackend.service;
 
-import com.republicaargentina.sistemabibliotecabackend.entity.Libro;
 import com.republicaargentina.sistemabibliotecabackend.entity.Usuario;
 import com.republicaargentina.sistemabibliotecabackend.exception.DataAccessExceptionImpl;
 import com.republicaargentina.sistemabibliotecabackend.repository.UsuarioRepository;
@@ -8,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
     private static final String ENTITY_NOT_FOUND_MESSAGE = "No existe un usuario con el ID ";
 
     @Override
@@ -43,6 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario save(Usuario usuario) {
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);

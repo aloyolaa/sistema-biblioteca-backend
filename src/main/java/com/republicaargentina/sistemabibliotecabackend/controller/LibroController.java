@@ -19,6 +19,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class LibroController {
     private final LibroService libroService;
+    private static final String XLS_CONTENT_TYPE = "Content-Type";
+    private static final String XLS_CONTENT_TYPE_VALUE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8";
+    private static final String XLS_ATTACHMENT = "attachment";
 
     @GetMapping("/")
     public ResponseEntity<List<Libro>> getAll() {
@@ -111,8 +114,8 @@ public class LibroController {
     @GetMapping("/export-all-xls")
     public ResponseEntity<byte[]> exportAllToXls() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("inventario_libros_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -131,8 +134,8 @@ public class LibroController {
     @GetMapping("/export-by-area-xls/{id}")
     public ResponseEntity<byte[]> exportByAreaToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("inventario_libros_por_area_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -151,8 +154,8 @@ public class LibroController {
     @GetMapping("/export-by-categoria-xls/{id}")
     public ResponseEntity<byte[]> exportByCategoriaToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("inventario_libros_por_categoria_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -171,8 +174,8 @@ public class LibroController {
     @GetMapping("/export-by-editorial-xls/{id}")
     public ResponseEntity<byte[]> exportByEditorialToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("inventario_libros_por_editorial_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()
@@ -191,8 +194,8 @@ public class LibroController {
     @GetMapping("/export-by-autor-xls/{id}")
     public ResponseEntity<byte[]> exportByAutorToXls(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-        var contentDisposition = ContentDisposition.builder("attachment")
+        headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
+        var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)
                 .filename("inventario_libros_por_autor_" + LocalDate.now() + ".xls").build();
         headers.setContentDisposition(contentDisposition);
         return ResponseEntity.ok()

@@ -177,3 +177,5 @@ INSERT INTO detalle_prestamo_material (ejemplar_material_id, prestamo_material_i
 INSERT INTO detalle_prestamo_material (ejemplar_material_id, prestamo_material_id) VALUES (8, 2)
 INSERT INTO detalle_prestamo_material (ejemplar_material_id, prestamo_material_id) VALUES (17, 3)
 INSERT INTO detalle_prestamo_material (ejemplar_material_id, prestamo_material_id) VALUES (18, 3)
+
+INSERT INTO usuario (username, password, email, nombres, apellidos, habilitado) VALUES ('aloyolaa', '$2a$10$u0cWE3L8YzmhMgekij7MZu4ZDHM2p.L/uwgk4eBnA9QqKqRrAYkme', 'aloyolaa@gmail.com', 'Alan', 'Loyola', true)

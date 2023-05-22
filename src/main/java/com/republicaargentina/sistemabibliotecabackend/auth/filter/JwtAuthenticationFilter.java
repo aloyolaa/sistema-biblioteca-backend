@@ -1,7 +1,5 @@
 package com.republicaargentina.sistemabibliotecabackend.auth.filter;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.republicaargentina.sistemabibliotecabackend.entity.Usuario;
 import jakarta.servlet.FilterChain;
@@ -38,10 +36,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             usuario = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
             username = usuario.getUsername();
             password = usuario.getPassword();
-        } catch (StreamReadException e) {
-            e.printStackTrace();
-        } catch (DatabindException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,8 +59,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         Map<String, Object> body = new HashMap<>();
         body.put("message", "Error en la autenticacion username o password incorrecto!");
         body.put("error", failed.getMessage());
