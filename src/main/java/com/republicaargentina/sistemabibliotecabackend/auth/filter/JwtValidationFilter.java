@@ -40,8 +40,11 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
                     .parseClaimsJws(token)
                     .getBody();
             String username = claims.getSubject();
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            Object authoritiesClaims = claims.get("authorities");
+            Collection<? extends GrantedAuthority> authorities = Arrays
+                    .asList(new ObjectMapper()
+                            .addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityJsonCreator.class)
+                            .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class));
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);

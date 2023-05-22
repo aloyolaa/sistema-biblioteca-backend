@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +23,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.getOneByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s no existe en el sistema!", username)));
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = usuario.getRoles()
+                .stream()
+                .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+                .collect(Collectors.toList());
         return new User(usuario.getUsername(),
                 usuario.getPassword(),
                 true,
