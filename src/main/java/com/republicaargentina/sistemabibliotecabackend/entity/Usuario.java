@@ -43,12 +43,17 @@ public class Usuario extends BaseEntity {
     @Column(name = "habilitado")
     private Boolean habilitado;
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "usuario_rol",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id"),
             uniqueConstraints = {
                     @UniqueConstraint(name = "uc_usuario_id_rol_id", columnNames = {"usuario_id", "rol_id"})
             })
-    private Set<Rol> roles = new LinkedHashSet<>();
+    private Set<Rol> roles = new LinkedHashSet<>();*/
+
+    @PrePersist
+    public void prePersist() {
+        this.habilitado = true;
+    }
 }

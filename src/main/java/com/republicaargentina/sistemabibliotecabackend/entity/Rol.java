@@ -15,9 +15,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "rol", uniqueConstraints = {
+@Table(name = "rol"/*, uniqueConstraints = {
         @UniqueConstraint(name = "uc_rol_nombre", columnNames = {"nombre"})
-})
+}*/)
 public class Rol extends BaseEntity {
     @Size(min = 4)
     @NotBlank
