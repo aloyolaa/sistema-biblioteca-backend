@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/ejemplares-libros")
+@PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
 @CrossOrigin(origins = "http://localhost:4200")
 public class EjemplarLibroController {
     private final EjemplarLibroService ejemplarLibroService;

@@ -43,7 +43,7 @@ public class Usuario extends BaseEntity {
     @Column(name = "habilitado")
     private Boolean habilitado;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_rol",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "rol_id"),

@@ -1,6 +1,7 @@
 package com.republicaargentina.sistemabibliotecabackend.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.republicaargentina.sistemabibliotecabackend.auth.SimpleGrantedAuthorityJsonCreator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
