@@ -4,6 +4,8 @@ import com.republicaargentina.sistemabibliotecabackend.entity.Usuario;
 import com.republicaargentina.sistemabibliotecabackend.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +26,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getOne/{id}")
     public ResponseEntity<Usuario> getOne(@PathVariable Long id) {
         return new ResponseEntity<>(usuarioService.getOne(id), HttpStatus.OK);
     }
@@ -42,5 +44,10 @@ public class UsuarioController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return new ResponseEntity<>(usuarioService.delete(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Usuario>> pagination(Pageable pageable) {
+        return new ResponseEntity<>(usuarioService.pagination(pageable), HttpStatus.OK);
     }
 }

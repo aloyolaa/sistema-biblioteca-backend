@@ -5,6 +5,7 @@ import com.republicaargentina.sistemabibliotecabackend.auth.filter.JwtValidation
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -36,7 +37,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests()
-                /*.requestMatchers(HttpMethod.GET, "/api/v1/usuarios/").permitAll()
+                //.requestMatchers("/api/v1/**").permitAll()
+                /*.requestMatchers("/api/v1/usuarios/**").permitAll()
+                .requestMatchers("/api/v1/libros/**").permitAll()
+                .requestMatchers("/api/v1/roles/").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/{id}").hasAnyRole(ADMIN, USER)
                 .requestMatchers(HttpMethod.POST, "/api/v1/usuarios/save").hasRole(ADMIN)
                 .requestMatchers("/api/v1/usuarios/**").hasRole(ADMIN)*/

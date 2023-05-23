@@ -7,6 +7,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +86,16 @@ public class UsuarioServiceImpl implements UsuarioService {
             return true;
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al eliminar los datos. Inténtelo mas tarde.", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Usuario> pagination(Pageable pageable) {
+        try {
+            return usuarioRepository.pagination(pageable);
+        } catch (DataAccessException e) {
+            throw new DataAccessExceptionImpl(e);
         }
     }
 }
