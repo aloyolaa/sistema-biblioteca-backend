@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/roles")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
 @CrossOrigin(origins = "http://localhost:4200")
 public class RolController {
     private final RolService rolService;
