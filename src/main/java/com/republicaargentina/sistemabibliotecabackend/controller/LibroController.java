@@ -4,7 +4,6 @@ import com.republicaargentina.sistemabibliotecabackend.entity.Libro;
 import com.republicaargentina.sistemabibliotecabackend.service.LibroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -98,11 +97,6 @@ public class LibroController {
     @GetMapping("/paginationByAutor/{id}")
     public ResponseEntity<Page<Libro>> paginationByAutor(@PathVariable Long id, Pageable pageable) {
         return new ResponseEntity<>(libroService.paginationByAutor(id, pageable), HttpStatus.OK);
-    }
-
-    @GetMapping("/export-pdf-1")
-    public ResponseEntity<Resource> exportPDF() {
-        return libroService.exportPDF();
     }
 
     @GetMapping("/export-all-pdf")

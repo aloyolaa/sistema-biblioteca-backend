@@ -218,38 +218,6 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Resource> exportPDF() {
-        try {
-            File file = ResourceUtils.getFile("classpath:reports/libros/reporte_libros.jasper");
-            File logo = ResourceUtils.getFile("classpath:img/logoColegio.png");
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("logoColegio", new FileInputStream((logo)));
-            parameters.put("ds", new JRBeanCollectionDataSource(libroRepository.getAll()));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
-            StringBuilder stringBuilder = new StringBuilder().append("inventario_libros");
-            byte[] report = JasperExportManager.exportReportToPdf(jasperPrint);
-            ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
-                    .filename(
-                            stringBuilder
-                                    .append("_")
-                                    .append(LocalDate.now())
-                                    .append(".pdf")
-                                    .toString()
-                    ).build();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentDisposition(contentDisposition);
-            return ResponseEntity.ok().contentLength(report.length)
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .headers(httpHeaders).body(new ByteArrayResource(report));
-        } catch (FileNotFoundException | JRException e) {
-            log.error(e.getMessage());
-        }
-        return null;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public byte[] exportAllToPdf() {
         return libroReportGenerator.exportToPdf(libroRepository.getAll());
     }
