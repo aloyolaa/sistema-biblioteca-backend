@@ -71,7 +71,7 @@ public class PrestamoLibroReportGenerator {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoColegio", new FileInputStream((logo)));
-            parameters.put("ds", new JRBeanCollectionDataSource(prestamoLibro.getDetalle()));
+            parameters.put("ds", new JRBeanCollectionDataSource(prestamoLibro.getEjemplares()));
             parameters.put("nombreDocente", prestamoLibro.getDocente().getNombre() + " " + prestamoLibro.getDocente().getApellido());
             parameters.put("telefono", prestamoLibro.getDocente().getTelefono());
             parameters.put("fechaPrestamo", dateTimeFormatter.format(prestamoLibro.getFechaPrestamo()));

@@ -51,8 +51,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional
     public PrestamoMaterial save(PrestamoMaterial prestamoMaterial) {
         try {
-            prestamoMaterial.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), true));
+            prestamoMaterial.getEjemplares()
+                    .forEach(e -> ejemplarMaterialService.cambiarPrestado(e.getId(), true));
             return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterial));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al guardar los datos. Inténtelo mas tarde.", e);
@@ -70,8 +70,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
                 throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
             PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
-            prestamoMaterial.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), false));
+            prestamoMaterial.getEjemplares()
+                    .forEach(e -> ejemplarMaterialService.cambiarPrestado(e.getId(), false));
             prestamoMaterialRepository.deleteById(id);
             return true;
         } catch (DataIntegrityViolationException e) {
@@ -100,8 +100,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
             prestamoMaterialById.setFechaDevolucion(LocalDateTime.now());
             prestamoMaterialById.setActivo(false);
             prestamoMaterialById.setObservaciones(prestamoMaterial.getObservaciones());
-            prestamoMaterialById.getDetalle()
-                    .forEach(d -> ejemplarMaterialService.cambiarPrestado(d.getEjemplarMaterial().getId(), false));
+            prestamoMaterialById.getEjemplares()
+                    .forEach(e -> ejemplarMaterialService.cambiarPrestado(e.getId(), false));
             return prestamoMaterialRepository.save(cambiarLetras(prestamoMaterialById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);

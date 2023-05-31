@@ -49,9 +49,11 @@ public class PrestamoMaterial extends BaseEntity {
     private Docente docente;
 
     @Size(min = 1, message = "{Size.prestamoMaterial.detalle}")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "prestamo_material_id", nullable = false)
-    private List<DetallePrestamoMaterial> detalle = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "detalle_prestamo_material",
+            joinColumns = @JoinColumn(name = "prestamo_material_id"),
+            inverseJoinColumns = @JoinColumn(name = "ejemplar_material_id"))
+    private List<EjemplarMaterial> ejemplares = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
