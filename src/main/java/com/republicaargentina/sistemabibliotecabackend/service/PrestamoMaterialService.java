@@ -27,13 +27,17 @@ public interface PrestamoMaterialService {
 
     Page<PrestamoMaterial> paginationByDescripcion(String descripcion, Pageable pageable);
 
-    Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable);
+    Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr,
+            Pageable pageable);
 
-    Page<PrestamoMaterial> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Long id, Pageable pageable);
+    Page<PrestamoMaterial> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr, String fechaPrestamoEndStr,
+            Long id, Pageable pageable);
 
-    Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable);
+    Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr,
+            String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable);
 
-    Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, String descripcion, Pageable pageable);
+    Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(String fechaPrestamoStartStr,
+            String fechaPrestamoEndStr, String descripcion, Pageable pageable);
 
     PrestamoMaterial cambiarLetras(PrestamoMaterial prestamoMaterial);
 

@@ -34,7 +34,8 @@ public class EditorialServiceImpl implements EditorialService {
     @Transactional(readOnly = true)
     public Editorial getOne(Long id) {
         try {
-            return editorialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return editorialRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +57,8 @@ public class EditorialServiceImpl implements EditorialService {
         if (editorial.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Editorial editorialById = editorialRepository.findById(editorial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + editorial.getId()));
+        Editorial editorialById = editorialRepository.findById(editorial.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + editorial.getId()));
         try {
             editorialById.setNombre(editorial.getNombre());
             return editorialRepository.save(cambiarLetras(editorialById));

@@ -41,7 +41,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Transactional(readOnly = true)
     public PrestamoMaterial getOne(Long id) {
         try {
-            return prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return prestamoMaterialRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -69,7 +70,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
             if (!prestamoMaterialRepository.existsById(id)) {
                 throw new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id);
             }
-            PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            PrestamoMaterial prestamoMaterial = prestamoMaterialRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
             prestamoMaterial.getEjemplares()
                     .forEach(e -> ejemplarMaterialService.cambiarPrestado(e.getId(), false));
             prestamoMaterialRepository.deleteById(id);
@@ -95,7 +97,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         if (prestamoMaterial.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para el cierre.");
         }
-        PrestamoMaterial prestamoMaterialById = prestamoMaterialRepository.findById(prestamoMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoMaterial.getId()));
+        PrestamoMaterial prestamoMaterialById = prestamoMaterialRepository.findById(prestamoMaterial.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + prestamoMaterial.getId()));
         try {
             prestamoMaterialById.setFechaDevolucion(LocalDateTime.now());
             prestamoMaterialById.setActivo(false);
@@ -150,7 +153,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Pageable pageable) {
+    public Page<PrestamoMaterial> paginationByFechaPrestamo(String fechaPrestamoStartStr, String fechaPrestamoEndStr,
+            Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
@@ -166,7 +170,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Long id, Pageable pageable) {
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDocente(String fechaPrestamoStartStr,
+            String fechaPrestamoEndStr, Long id, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
@@ -174,7 +179,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
-            return prestamoMaterialRepository.paginationByFechaPrestamoAndDocente(fechaPrestamoStart, fechaPrestamoEnd, id, pageable);
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndDocente(fechaPrestamoStart, fechaPrestamoEnd,
+                    id, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -182,7 +188,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable) {
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndGradoAndSeccion(String fechaPrestamoStartStr,
+            String fechaPrestamoEndStr, Integer grado, String seccion, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
@@ -190,7 +197,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
-            return prestamoMaterialRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart, fechaPrestamoEnd, grado, seccion, pageable);
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStart,
+                    fechaPrestamoEnd, grado, seccion, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -198,7 +206,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(String fechaPrestamoStartStr, String fechaPrestamoEndStr, String descripcion, Pageable pageable) {
+    public Page<PrestamoMaterial> paginationByFechaPrestamoAndDescripcion(String fechaPrestamoStartStr,
+            String fechaPrestamoEndStr, String descripcion, Pageable pageable) {
         if (fechaPrestamoStartStr == null || fechaPrestamoEndStr == null) {
             throw new IllegalArgumentException(DATETIME_MESSAGE);
         }
@@ -206,7 +215,8 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
         LocalDateTime fechaPrestamoEnd = LocalDateTime.parse(fechaPrestamoEndStr, dateTimeFormatter);
         fechaPrestamoEnd = fechaPrestamoEnd.plusHours(23).plusMinutes(59).plusSeconds(59);
         try {
-            return prestamoMaterialRepository.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStart, fechaPrestamoEnd, descripcion, pageable);
+            return prestamoMaterialRepository.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStart,
+                    fechaPrestamoEnd, descripcion, pageable);
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -234,13 +244,15 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Override
     @Transactional(readOnly = true)
     public byte[] exportByPrestamoMaterialToPdf(Long id) {
-        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToPdf(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToPdf(prestamoMaterialRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public byte[] exportByPrestamoMaterialToXls(Long id) {
-        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToXls(prestamoMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+        return prestamoMaterialReportGenerator.exportByPrestamoMaterialToXls(prestamoMaterialRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
     }
 
     @Override
@@ -258,12 +270,14 @@ public class PrestamoMaterialServiceImpl implements PrestamoMaterialService {
     @Override
     @Transactional(readOnly = true)
     public byte[] exportByGradoAndSeccionToPdf(Integer grado, String seccion) {
-        return prestamoMaterialReportGenerator.exportToPdf(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
+        return prestamoMaterialReportGenerator
+                .exportToPdf(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
     }
 
     @Override
     @Transactional(readOnly = true)
     public byte[] exportByGradoAndSeccionToXls(Integer grado, String seccion) {
-        return prestamoMaterialReportGenerator.exportToXls(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
+        return prestamoMaterialReportGenerator
+                .exportToXls(prestamoMaterialRepository.getAllByGradoAndSeccion(grado, seccion));
     }
 }

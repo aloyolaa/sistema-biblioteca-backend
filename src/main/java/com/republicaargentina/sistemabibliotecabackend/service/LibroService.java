@@ -1,10 +1,8 @@
 package com.republicaargentina.sistemabibliotecabackend.service;
 
 import com.republicaargentina.sistemabibliotecabackend.entity.Libro;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

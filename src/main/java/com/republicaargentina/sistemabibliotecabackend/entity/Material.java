@@ -15,7 +15,7 @@ import lombok.Setter;
         @Index(name = "idx_material_codigo", columnList = "codigo"),
         @Index(name = "idx_material_nombre", columnList = "nombre")
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uc_material_codigo", columnNames = {"codigo"})
+        @UniqueConstraint(name = "uc_material_codigo", columnNames = { "codigo" })
 })
 public class Material extends BaseEntity {
     @Size(min = 4, message = "{Size.material.codigo}")
@@ -34,7 +34,7 @@ public class Material extends BaseEntity {
     @NotNull(message = "{NotNull.material.area}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "area_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Area area;
 
     public String getAreaNombre() {

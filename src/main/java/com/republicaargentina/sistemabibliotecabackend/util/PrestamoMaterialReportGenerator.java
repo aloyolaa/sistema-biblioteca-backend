@@ -25,7 +25,8 @@ import java.util.Map;
 public class PrestamoMaterialReportGenerator {
     public JasperPrint getReport(List<PrestamoMaterial> prestamosMateriales) {
         try {
-            File file = ResourceUtils.getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamos_materiales.jasper");
+            File file = ResourceUtils
+                    .getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamos_materiales.jasper");
             File logo = ResourceUtils.getFile("src/main/resources/img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
@@ -66,16 +67,19 @@ public class PrestamoMaterialReportGenerator {
     public JasperPrint getReportByPrestamoMaterial(PrestamoMaterial prestamoMaterial) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy / MM / dd HH:mm");
         try {
-            File file = ResourceUtils.getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamo_materiales.jasper");
+            File file = ResourceUtils
+                    .getFile("src/main/resources/reports/prestamos_materiales/reporte_prestamo_materiales.jasper");
             File logo = ResourceUtils.getFile("src/main/resources/img/logoColegio.png");
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(file);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoColegio", new FileInputStream((logo)));
             parameters.put("ds", new JRBeanCollectionDataSource(prestamoMaterial.getEjemplares()));
-            parameters.put("nombreDocente", prestamoMaterial.getDocente().getNombre() + " " + prestamoMaterial.getDocente().getApellido());
+            parameters.put("nombreDocente",
+                    prestamoMaterial.getDocente().getNombre() + " " + prestamoMaterial.getDocente().getApellido());
             parameters.put("telefono", prestamoMaterial.getDocente().getTelefono());
             parameters.put("fechaPrestamo", dateTimeFormatter.format(prestamoMaterial.getFechaPrestamo()));
-            parameters.put("fechaDevolucion", prestamoMaterial.getFechaDevolucion() == null ? null : dateTimeFormatter.format(prestamoMaterial.getFechaDevolucion()));
+            parameters.put("fechaDevolucion", prestamoMaterial.getFechaDevolucion() == null ? null
+                    : dateTimeFormatter.format(prestamoMaterial.getFechaDevolucion()));
             parameters.put("aula", prestamoMaterial.getGrado() + "° \"" + prestamoMaterial.getSeccion() + "\"");
             return JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
         } catch (FileNotFoundException | JRException e) {

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "Autor", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_autor_nombre_apellido", columnNames = {"nombre", "apellido"})
+        @UniqueConstraint(name = "uc_autor_nombre_apellido", columnNames = { "nombre", "apellido" })
 })
 public class Autor extends BaseEntity {
     @Size(min = 4, message = "{Size.autor.nombre}")

@@ -34,7 +34,8 @@ public class AutorServiceImpl implements AutorService {
     @Transactional(readOnly = true)
     public Autor getOne(Long id) {
         try {
-            return autorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return autorRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +57,8 @@ public class AutorServiceImpl implements AutorService {
         if (autor.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Autor autorById = autorRepository.findById(autor.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + autor.getId()));
+        Autor autorById = autorRepository.findById(autor.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + autor.getId()));
         try {
             autorById.setNombre(autor.getNombre());
             return autorRepository.save(cambiarLetras(autorById));

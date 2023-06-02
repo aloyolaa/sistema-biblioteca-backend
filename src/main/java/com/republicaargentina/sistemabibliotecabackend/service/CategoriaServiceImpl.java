@@ -34,7 +34,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Categoria getOne(Long id) {
         try {
-            return categoriaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return categoriaRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +57,8 @@ public class CategoriaServiceImpl implements CategoriaService {
         if (categoria.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Categoria categoriaById = categoriaRepository.findById(categoria.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + categoria.getId()));
+        Categoria categoriaById = categoriaRepository.findById(categoria.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + categoria.getId()));
         try {
             categoriaById.setNombre(categoria.getNombre());
             return categoriaRepository.save(cambiarLetras(categoriaById));

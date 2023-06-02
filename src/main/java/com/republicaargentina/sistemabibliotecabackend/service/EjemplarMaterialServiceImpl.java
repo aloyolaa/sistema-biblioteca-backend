@@ -39,7 +39,8 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
     @Transactional(readOnly = true)
     public EjemplarMaterial getOne(Long id) {
         try {
-            return ejemplarMaterialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return ejemplarMaterialRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -49,7 +50,8 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
     @Transactional
     public Boolean save(Long materialId, Integer cantidad) {
         try {
-            Optional<EjemplarMaterial> byMaterialIdOrderByIdDesc = ejemplarMaterialRepository.getOneByMaterial(materialId);
+            Optional<EjemplarMaterial> byMaterialIdOrderByIdDesc = ejemplarMaterialRepository
+                    .getOneByMaterial(materialId);
             List<EjemplarMaterial> ejemplares = new ArrayList<>();
             Integer numero = 0;
             if (byMaterialIdOrderByIdDesc.isPresent()) {
@@ -75,7 +77,8 @@ public class EjemplarMaterialServiceImpl implements EjemplarMaterialService {
         if (ejemplarMaterial.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        EjemplarMaterial ejemplarMaterialById = ejemplarMaterialRepository.findById(ejemplarMaterial.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarMaterial.getId()));
+        EjemplarMaterial ejemplarMaterialById = ejemplarMaterialRepository.findById(ejemplarMaterial.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarMaterial.getId()));
         if (Boolean.TRUE.equals(ejemplarMaterialById.getPrestado())) {
             throw new IllegalArgumentException("No se puede actualizar un ejemplar que esta prestado.");
         }

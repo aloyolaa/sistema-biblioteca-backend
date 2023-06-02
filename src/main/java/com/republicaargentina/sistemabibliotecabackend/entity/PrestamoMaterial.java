@@ -45,14 +45,12 @@ public class PrestamoMaterial extends BaseEntity {
     @NotNull(message = "{NotNull.prestamoMaterial.docente}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "docente_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Docente docente;
 
     @Size(min = 1, message = "{Size.prestamoMaterial.detalle}")
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "detalle_prestamo_material",
-            joinColumns = @JoinColumn(name = "prestamo_material_id"),
-            inverseJoinColumns = @JoinColumn(name = "ejemplar_material_id"))
+    @JoinTable(name = "detalle_prestamo_material", joinColumns = @JoinColumn(name = "prestamo_material_id"), inverseJoinColumns = @JoinColumn(name = "ejemplar_material_id"))
     private List<EjemplarMaterial> ejemplares = new ArrayList<>();
 
     @PrePersist

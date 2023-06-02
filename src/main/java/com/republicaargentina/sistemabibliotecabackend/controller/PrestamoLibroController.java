@@ -65,33 +65,48 @@ public class PrestamoLibroController {
     }
 
     @GetMapping("/paginationByGradoAndSeccion/{grado}/{seccion}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByGradoAndSeccion(@PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByGradoAndSeccion(grado, seccion, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<PrestamoLibro>> paginationByGradoAndSeccion(@PathVariable Integer grado,
+            @PathVariable String seccion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByGradoAndSeccion(grado, seccion, pageable),
+                HttpStatus.OK);
     }
 
     @GetMapping("/paginationByDescripcion/{descripcion}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByDescripcion(@PathVariable String descripcion, Pageable pageable) {
+    public ResponseEntity<Page<PrestamoLibro>> paginationByDescripcion(@PathVariable String descripcion,
+            Pageable pageable) {
         return new ResponseEntity<>(prestamoLibroService.paginationByDescripcion(descripcion, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByFechaPrestamo/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamo(@PathVariable String fechaPrestamoStartStr,
+            @PathVariable String fechaPrestamoEndStr, Pageable pageable) {
+        return new ResponseEntity<>(
+                prestamoLibroService.paginationByFechaPrestamo(fechaPrestamoStartStr, fechaPrestamoEndStr, pageable),
+                HttpStatus.OK);
     }
 
     @GetMapping("/paginationByFechaPrestamoAndDocente/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{docenteId}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDocente(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Long docenteId, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDocente(fechaPrestamoStartStr, fechaPrestamoEndStr, docenteId, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDocente(
+            @PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr,
+            @PathVariable Long docenteId, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDocente(fechaPrestamoStartStr,
+                fechaPrestamoEndStr, docenteId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByFechaPrestamoAndGradoAndSeccion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{grado}/{seccion}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndGradoAndSeccion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndGradoAndSeccion(fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndGradoAndSeccion(
+            @PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr,
+            @PathVariable Integer grado, @PathVariable String seccion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndGradoAndSeccion(
+                fechaPrestamoStartStr, fechaPrestamoEndStr, grado, seccion, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/paginationByFechaPrestamoAndDescripcion/{fechaPrestamoStartStr}/{fechaPrestamoEndStr}/{descripcion}")
-    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDescripcion(@PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr, @PathVariable String descripcion, Pageable pageable) {
-        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr, fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
+    public ResponseEntity<Page<PrestamoLibro>> paginationByFechaPrestamoAndDescripcion(
+            @PathVariable String fechaPrestamoStartStr, @PathVariable String fechaPrestamoEndStr,
+            @PathVariable String descripcion, Pageable pageable) {
+        return new ResponseEntity<>(prestamoLibroService.paginationByFechaPrestamoAndDescripcion(fechaPrestamoStartStr,
+                fechaPrestamoEndStr, descripcion, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/export-all-pdf")
@@ -138,7 +153,8 @@ public class PrestamoLibroController {
     public ResponseEntity<byte[]> exportByDocenteToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("prestamos_libros_por_docente", "prestamo_libros_por_docente_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("prestamos_libros_por_docente",
+                "prestamo_libros_por_docente_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportByDocenteToPdf(id));
     }
 
@@ -155,15 +171,19 @@ public class PrestamoLibroController {
     }
 
     @GetMapping("/export-by-grado-seccion-pdf/{grado}/{seccion}")
-    public ResponseEntity<byte[]> exportByGradoAndSeccionToPdf(@PathVariable Integer grado, @PathVariable String seccion) {
+    public ResponseEntity<byte[]> exportByGradoAndSeccionToPdf(@PathVariable Integer grado,
+            @PathVariable String seccion) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("prestamos_libros_por_grado_seccion", "prestamo_libros_por_grado_seccion_" + LocalDate.now() + ".pdf");
-        return ResponseEntity.ok().headers(headers).body(prestamoLibroService.exportByGradoAndSeccionToPdf(grado, seccion));
+        headers.setContentDispositionFormData("prestamos_libros_por_grado_seccion",
+                "prestamo_libros_por_grado_seccion_" + LocalDate.now() + ".pdf");
+        return ResponseEntity.ok().headers(headers)
+                .body(prestamoLibroService.exportByGradoAndSeccionToPdf(grado, seccion));
     }
 
     @GetMapping("/export-by-grado-seccion-xls/{grado}/{seccion}")
-    public ResponseEntity<byte[]> exportByGradoAndSeccionToXls(@PathVariable Integer grado, @PathVariable String seccion) {
+    public ResponseEntity<byte[]> exportByGradoAndSeccionToXls(@PathVariable Integer grado,
+            @PathVariable String seccion) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(XLS_CONTENT_TYPE, XLS_CONTENT_TYPE_VALUE);
         var contentDisposition = ContentDisposition.builder(XLS_ATTACHMENT)

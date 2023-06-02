@@ -123,7 +123,8 @@ public class LibroController {
     public ResponseEntity<byte[]> exportByAreaToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_libros_por_area", "inventario_libros_por_area_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_libros_por_area",
+                "inventario_libros_por_area_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(libroService.exportByAreaToPdf(id));
     }
 
@@ -143,7 +144,8 @@ public class LibroController {
     public ResponseEntity<byte[]> exportByCategoriaToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_libros_por_cateegoria", "inventario_libros_por_categoria_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_libros_por_cateegoria",
+                "inventario_libros_por_categoria_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(libroService.exportByCategoriaToPdf(id));
     }
 
@@ -163,7 +165,8 @@ public class LibroController {
     public ResponseEntity<byte[]> exportByEditorialToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_libros_por_editorial", "inventario_libros_por_editorial_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_libros_por_editorial",
+                "inventario_libros_por_editorial_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(libroService.exportByEditorialToPdf(id));
     }
 
@@ -183,7 +186,8 @@ public class LibroController {
     public ResponseEntity<byte[]> exportByAutorToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_libros_por_autor", "inventario_libros_por_autor_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_libros_por_autor",
+                "inventario_libros_por_autor_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(libroService.exportByAutorToPdf(id));
     }
 

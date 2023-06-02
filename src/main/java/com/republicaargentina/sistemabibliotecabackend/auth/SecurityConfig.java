@@ -29,8 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
-    private static final String ADMIN = "ADMIN";
-    private static final String USER = "USER";
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -45,14 +43,6 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests()
-                //.requestMatchers("/api/v1/usuarios/**").permitAll()
-                //.requestMatchers("/api/v1/roles/").permitAll()
-                //.requestMatchers("/api/v1/usuarios/**").permitAll()
-                /*.requestMatchers("/api/v1/libros/**").permitAll()
-                .requestMatchers("/api/v1/roles/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/{id}").hasAnyRole(ADMIN, USER)
-                .requestMatchers(HttpMethod.POST, "/api/v1/usuarios/save").hasRole(ADMIN)
-                .requestMatchers("/api/v1/usuarios/**").hasRole(ADMIN)*/
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))

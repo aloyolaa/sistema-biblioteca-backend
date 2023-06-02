@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "categoria", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_categoria_nombre", columnNames = {"nombre"})
+        @UniqueConstraint(name = "uc_categoria_nombre", columnNames = { "nombre" })
 })
 public class Categoria extends BaseEntity {
     @Size(min = 4, message = "{Size.categoria.nombre}")

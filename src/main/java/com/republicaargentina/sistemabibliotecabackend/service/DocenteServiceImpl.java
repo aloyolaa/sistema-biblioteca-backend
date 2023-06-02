@@ -34,7 +34,8 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional(readOnly = true)
     public Docente getOne(Long id) {
         try {
-            return docenteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return docenteRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +57,8 @@ public class DocenteServiceImpl implements DocenteService {
         if (docente.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Docente docenteById = docenteRepository.findById(docente.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + docente.getId()));
+        Docente docenteById = docenteRepository.findById(docente.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + docente.getId()));
         try {
             docenteById.setNombre(docente.getNombre());
             docenteById.setApellido(docente.getApellido());
@@ -99,7 +101,8 @@ public class DocenteServiceImpl implements DocenteService {
     @Transactional(readOnly = true)
     public Docente getOneByDni(String dni) {
         try {
-            return docenteRepository.getOneByDni(dni).orElseThrow(() -> new EntityNotFoundException("No existe con docente con el dni " + dni));
+            return docenteRepository.getOneByDni(dni)
+                    .orElseThrow(() -> new EntityNotFoundException("No existe con docente con el dni " + dni));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

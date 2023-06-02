@@ -32,7 +32,7 @@ public class EjemplarLibroController {
     }
 
     @GetMapping("/save/{libroId}/{cantidad}")
-    public ResponseEntity<Boolean> save(@PathVariable Long libroId, @PathVariable  Integer cantidad) {
+    public ResponseEntity<Boolean> save(@PathVariable Long libroId, @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarLibroService.save(libroId, cantidad), HttpStatus.OK);
     }
 
@@ -47,7 +47,8 @@ public class EjemplarLibroController {
     }
 
     @GetMapping("/getAllByLibroAndEstado/{codigo}/{cantidad}")
-    public ResponseEntity<List<EjemplarLibro>> getAllByLibroAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
+    public ResponseEntity<List<EjemplarLibro>> getAllByLibroAndEstado(@PathVariable String codigo,
+            @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarLibroService.getAllByLibroAndEstado(codigo, cantidad), HttpStatus.OK);
     }
 
@@ -95,7 +96,8 @@ public class EjemplarLibroController {
     public ResponseEntity<byte[]> exportByLibroToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("ejemplares_libros_por_libro", "ejemplares_libros_por_libro_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("ejemplares_libros_por_libro",
+                "ejemplares_libros_por_libro_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(ejemplarLibroService.exportByLibroToPdf(id));
     }
 

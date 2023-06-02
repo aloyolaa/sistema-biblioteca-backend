@@ -54,7 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public Material getOne(Long id) {
         try {
-            return materialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return materialRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -76,7 +77,8 @@ public class MaterialServiceImpl implements MaterialService {
         if (material.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Material materialById = materialRepository.findById(material.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + material.getId()));
+        Material materialById = materialRepository.findById(material.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + material.getId()));
         try {
             materialById.setCodigo(material.getCodigo());
             materialById.setNombre(material.getNombre());
@@ -119,7 +121,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public Material getOneByNombre(String nombre) {
         try {
-            return materialRepository.getOneByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("No existe un material con el nombre " + nombre));
+            return materialRepository.getOneByNombre(nombre)
+                    .orElseThrow(() -> new EntityNotFoundException("No existe un material con el nombre " + nombre));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -129,7 +132,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Transactional(readOnly = true)
     public Material getOneByCodigo(String codigo) {
         try {
-            return materialRepository.getOneByCodigo(codigo).orElseThrow(() -> new EntityNotFoundException("No existe un material con el código " + codigo));
+            return materialRepository.getOneByCodigo(codigo)
+                    .orElseThrow(() -> new EntityNotFoundException("No existe un material con el código " + codigo));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -204,8 +208,8 @@ public class MaterialServiceImpl implements MaterialService {
                                     .append("_")
                                     .append(LocalDate.now())
                                     .append(".pdf")
-                                    .toString()
-                    ).build();
+                                    .toString())
+                    .build();
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentDisposition(contentDisposition);
             return ResponseEntity.ok().contentLength(report.length)

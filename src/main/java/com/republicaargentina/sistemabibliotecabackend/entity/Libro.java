@@ -16,7 +16,7 @@ import java.util.Set;
         @Index(name = "idx_libro_codigo", columnList = "codigo"),
         @Index(name = "idx_libro_titulo", columnList = "titulo")
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uc_libro_codigo", columnNames = {"codigo"})
+        @UniqueConstraint(name = "uc_libro_codigo", columnNames = { "codigo" })
 })
 public class Libro extends BaseEntity {
     @Size(min = 4, message = "{Size.libro.codigo}")
@@ -43,26 +43,24 @@ public class Libro extends BaseEntity {
     @NotNull(message = "{NotNull.libro.area}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "area_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Area area;
 
     @NotNull(message = "{NotNull.libro.categoria}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "categoria_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Categoria categoria;
 
     @NotNull(message = "{NotNull.libro.editorial}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "editorial_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Editorial editorial;
 
     @Size(min = 1, message = "{Size.libro.autores}")
     @ManyToMany
-    @JoinTable(name = "libro_autor",
-            joinColumns = @JoinColumn(name = "libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id"))
+    @JoinTable(name = "libro_autor", joinColumns = @JoinColumn(name = "libro_id"), inverseJoinColumns = @JoinColumn(name = "autor_id"))
     private Set<Autor> autores = new LinkedHashSet<>();
 
     public String getAreaNombre() {

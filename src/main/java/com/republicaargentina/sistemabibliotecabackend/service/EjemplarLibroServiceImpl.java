@@ -39,7 +39,8 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
     @Transactional(readOnly = true)
     public EjemplarLibro getOne(Long id) {
         try {
-            return ejemplarLibroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return ejemplarLibroRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -75,7 +76,8 @@ public class EjemplarLibroServiceImpl implements EjemplarLibroService {
         if (ejemplarLibro.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        EjemplarLibro ejemplarLibroById = ejemplarLibroRepository.findById(ejemplarLibro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarLibro.getId()));
+        EjemplarLibro ejemplarLibroById = ejemplarLibroRepository.findById(ejemplarLibro.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + ejemplarLibro.getId()));
         if (Boolean.TRUE.equals(ejemplarLibroById.getPrestado())) {
             throw new IllegalArgumentException("No se puede actualizar un ejemplar que esta prestado.");
         }

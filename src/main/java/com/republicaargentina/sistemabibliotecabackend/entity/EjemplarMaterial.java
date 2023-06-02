@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "ejemplar_material", uniqueConstraints = {
-        @UniqueConstraint(name = "uc_ejemplar_material_material_id_numero", columnNames = {"material_id", "numero"})
+        @UniqueConstraint(name = "uc_ejemplar_material_material_id_numero", columnNames = { "material_id", "numero" })
 })
 public class EjemplarMaterial extends BaseEntity {
     @NotNull(message = "{NotNull.ejemplarMaterial.numero}")
@@ -29,7 +29,7 @@ public class EjemplarMaterial extends BaseEntity {
     @NotNull(message = "{NotNull.ejemplarMaterial.material}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", nullable = false, updatable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Material material;
 
     @PrePersist

@@ -32,7 +32,7 @@ public class EjemplarMaterialController {
     }
 
     @GetMapping("/save/{materialId}/{cantidad}")
-    public ResponseEntity<Boolean> save(@PathVariable Long materialId, @PathVariable  Integer cantidad) {
+    public ResponseEntity<Boolean> save(@PathVariable Long materialId, @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarMaterialService.save(materialId, cantidad), HttpStatus.OK);
     }
 
@@ -47,7 +47,8 @@ public class EjemplarMaterialController {
     }
 
     @GetMapping("/getAllByMaterialAndEstado/{codigo}/{cantidad}")
-    public ResponseEntity<List<EjemplarMaterial>> getAllByMaterialAndEstado(@PathVariable String codigo, @PathVariable Integer cantidad) {
+    public ResponseEntity<List<EjemplarMaterial>> getAllByMaterialAndEstado(@PathVariable String codigo,
+            @PathVariable Integer cantidad) {
         return new ResponseEntity<>(ejemplarMaterialService.getAllByMaterialAndEstado(codigo, cantidad), HttpStatus.OK);
     }
 
@@ -75,7 +76,8 @@ public class EjemplarMaterialController {
     public ResponseEntity<byte[]> exportAllToPdf() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("ejemplares_materiales", "ejemplares_materiales_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("ejemplares_materiales",
+                "ejemplares_materiales_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(ejemplarMaterialService.exportAllToPdf());
     }
 
@@ -95,7 +97,8 @@ public class EjemplarMaterialController {
     public ResponseEntity<byte[]> exportByMaterialToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("ejemplares_materiales_por_material", "ejemplares_materiales_por_material_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("ejemplares_materiales_por_material",
+                "ejemplares_materiales_por_material_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(ejemplarMaterialService.exportByMaterialToPdf(id));
     }
 

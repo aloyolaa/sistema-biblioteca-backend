@@ -91,7 +91,8 @@ public class MaterialController {
     public ResponseEntity<byte[]> exportAllToPdf() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_materiales", "inventario_materiales_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_materiales",
+                "inventario_materiales_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(materialService.exportAllToPdf());
     }
 
@@ -111,7 +112,8 @@ public class MaterialController {
     public ResponseEntity<byte[]> exportByAreaToPdf(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inventario_materiales_por_area", "inventario_materiales_por_area_" + LocalDate.now() + ".pdf");
+        headers.setContentDispositionFormData("inventario_materiales_por_area",
+                "inventario_materiales_por_area_" + LocalDate.now() + ".pdf");
         return ResponseEntity.ok().headers(headers).body(materialService.exportByAreaToPdf(id));
     }
 

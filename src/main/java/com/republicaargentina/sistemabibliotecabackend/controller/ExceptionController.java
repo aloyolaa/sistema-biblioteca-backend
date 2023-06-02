@@ -36,7 +36,8 @@ public class ExceptionController {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Fields do not meet the requirements");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                "Campos no cumplen requerimientos");
         problemDetail.setTitle("Campos inválidos");
         problemDetail.setType(URI.create("http://localhost:8080/api/errors/invalid-fields"));
         problemDetail.setProperty(TIMESTAMP, LocalDateTime.now());
@@ -46,7 +47,8 @@ public class ExceptionController {
 
     @ExceptionHandler(DataAccessExceptionImpl.class)
     public ProblemDetail dataAccessExceptionImpl(DataAccessExceptionImpl e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMostSpecificCause().getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getMostSpecificCause().getMessage());
         problemDetail.setTitle(e.getMessage());
         problemDetail.setType(URI.create("http://localhost:8080/api/errors/data-access"));
         problemDetail.setProperty(TIMESTAMP, LocalDateTime.now());
@@ -55,7 +57,8 @@ public class ExceptionController {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail dataIntegrityViolationException(DataIntegrityViolationException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMostSpecificCause().getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getMostSpecificCause().getMessage());
         problemDetail.setTitle(e.getMessage());
         problemDetail.setType(URI.create("http://localhost:8080/api/errors/data-integrity"));
         problemDetail.setProperty(TIMESTAMP, LocalDateTime.now());

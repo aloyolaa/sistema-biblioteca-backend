@@ -34,7 +34,8 @@ public class AreaServiceImpl implements AreaService {
     @Transactional(readOnly = true)
     public Area getOne(Long id) {
         try {
-            return areaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return areaRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -56,7 +57,8 @@ public class AreaServiceImpl implements AreaService {
         if (area.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Area areaById = areaRepository.findById(area.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + area.getId()));
+        Area areaById = areaRepository.findById(area.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + area.getId()));
         try {
             areaById.setNombre(area.getNombre());
             return areaRepository.save(cambiarLetras(areaById));

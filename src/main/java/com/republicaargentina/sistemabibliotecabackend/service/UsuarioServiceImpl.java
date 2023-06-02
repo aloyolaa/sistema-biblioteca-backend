@@ -39,7 +39,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public UsuarioDto getOne(Long id) {
         try {
-            return usuarioMapper.toDto(usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
+            return usuarioMapper.toDto(usuarioRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id)));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -62,7 +63,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioDto.id() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Usuario usuarioById = usuarioRepository.findById(usuarioDto.id()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + usuarioDto.id()));
+        Usuario usuarioById = usuarioRepository.findById(usuarioDto.id())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + usuarioDto.id()));
         Usuario usuario = usuarioMapper.partialUpdate(usuarioDto, usuarioById);
         try {
             return usuarioMapper.toDto(usuarioRepository.save(usuario));
@@ -92,7 +94,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public UsuarioDto getOneByUsername(String username) {
         try {
-            return usuarioMapper.toDto(usuarioRepository.getOneByUsername(username).orElseThrow(() -> new EntityNotFoundException("No existe un usuario con el Username " + username)));
+            return usuarioMapper.toDto(usuarioRepository.getOneByUsername(username).orElseThrow(
+                    () -> new EntityNotFoundException("No existe un usuario con el Username " + username)));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }

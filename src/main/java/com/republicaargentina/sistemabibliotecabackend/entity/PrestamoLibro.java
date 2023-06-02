@@ -16,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "prestamo_libro")
 public class PrestamoLibro extends BaseEntity {
-
     @Column(name = "fecha_prestamo")
     private LocalDateTime fechaPrestamo;
 
@@ -46,14 +45,12 @@ public class PrestamoLibro extends BaseEntity {
     @NotNull(message = "{NotNull.prestamoLibro.docente}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "docente_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Docente docente;
 
     @Size(min = 1, message = "{Size.prestamoLibro.detalle}")
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "detalle_prestamo_libro",
-            joinColumns = @JoinColumn(name = "prestamo_libro_id"),
-            inverseJoinColumns = @JoinColumn(name = "ejemplar_libro_id"))
+    @JoinTable(name = "detalle_prestamo_libro", joinColumns = @JoinColumn(name = "prestamo_libro_id"), inverseJoinColumns = @JoinColumn(name = "ejemplar_libro_id"))
     private List<EjemplarLibro> ejemplares = new ArrayList<>();
 
     @PrePersist
