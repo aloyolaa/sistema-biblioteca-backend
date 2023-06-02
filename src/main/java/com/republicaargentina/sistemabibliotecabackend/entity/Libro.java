@@ -29,7 +29,6 @@ public class Libro extends BaseEntity {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Max(value = 2023, message = "{Max.libro.anio}")
     @Min(value = 1, message = "{Min.libro.anio}")
     @NotNull(message = "{NotNull.libro.anio}")
     @Column(name = "anio", nullable = false)

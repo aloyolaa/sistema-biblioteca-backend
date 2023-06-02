@@ -18,32 +18,33 @@ import java.util.List;
         @UniqueConstraint(name = "uc_usuario_email", columnNames = {"email"})
 })
 public class Usuario extends BaseEntity {
-    @Size(min = 4)
-    @NotBlank
+    @Size(min = 4, message = "{Size.usuario.username}")
+    @NotBlank(message = "{NotBlank.usuario.username}")
     @Column(name = "username", nullable = false)
     private String username;
 
-    @NotBlank
+    @Size(min = 8, message = "{Size.usuario.password}")
+    @NotBlank(message = "{NotBlank.usuario.password}")
     @Column(name = "password", nullable = false)
     private String password;
 
     @Email
-    @NotBlank
+    @NotBlank(message = "{NotBlank.usuario.email}")
     @Column(name = "email", nullable = false)
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.usuario.nombres}")
     @Column(name = "nombres", nullable = false)
     private String nombres;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.usuario.apellidos}")
     @Column(name = "apellidos", nullable = false)
     private String apellidos;
 
     @Column(name = "habilitado")
     private Boolean habilitado;
 
-    @Size(min = 1)
+    @Size(min = 1, message = "{Size.usuario.roles}")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_rol",
             joinColumns = @JoinColumn(name = "usuario_id"),
