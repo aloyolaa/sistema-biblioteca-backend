@@ -36,7 +36,8 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Libro getOne(Long id) {
         try {
-            return libroRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+            return libroRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -58,7 +59,8 @@ public class LibroServiceImpl implements LibroService {
         if (libro.getId() == null) {
             throw new IllegalArgumentException("El identificador de necesario para la actualización.");
         }
-        Libro libroById = libroRepository.findById(libro.getId()).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + libro.getId()));
+        Libro libroById = libroRepository.findById(libro.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + libro.getId()));
         try {
             libroById.setCodigo(libro.getCodigo());
             libroById.setTitulo(libro.getTitulo());
@@ -105,7 +107,8 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Libro getOneByTitulo(String titulo) {
         try {
-            return libroRepository.getOneByTitulo(titulo).orElseThrow(() -> new EntityNotFoundException("No existe un libro con el título " + titulo));
+            return libroRepository.getOneByTitulo(titulo)
+                    .orElseThrow(() -> new EntityNotFoundException("No existe un libro con el título " + titulo));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
@@ -115,7 +118,8 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(readOnly = true)
     public Libro getOneByCodigo(String codigo) {
         try {
-            return libroRepository.getOneByCodigo(codigo).orElseThrow(() -> new EntityNotFoundException("No existe un libro con el código " + codigo));
+            return libroRepository.getOneByCodigo(codigo)
+                    .orElseThrow(() -> new EntityNotFoundException("No existe un libro con el código " + codigo));
         } catch (DataAccessException e) {
             throw new DataAccessExceptionImpl(e);
         }
