@@ -29,16 +29,11 @@ public class Libro extends BaseEntity {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Min(value = 1, message = "{Min.libro.anio}")
-    @NotNull(message = "{NotNull.libro.anio}")
-    @Column(name = "anio", nullable = false)
+    @Column(name = "anio")
     private Integer anio;
 
-    @Max(value = 6, message = "{Max.libro.grado}")
-    @Min(value = 1, message = "{Min.libro.grado}")
-    @NotNull(message = "{NotNull.libro.grado}")
-    @Column(name = "grado", nullable = false)
-    private Integer grado;
+    @Column(name = "grado")
+    private String grado;
 
     @NotNull(message = "{NotNull.libro.area}")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

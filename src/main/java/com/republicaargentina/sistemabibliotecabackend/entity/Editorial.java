@@ -16,7 +16,7 @@ import lombok.Setter;
         @UniqueConstraint(name = "uc_editorial_nombre", columnNames = { "nombre" })
 })
 public class Editorial extends BaseEntity {
-    @Size(min = 4, message = "{Size.editorial.nombre}")
+    @Size(min = 3, message = "{Size.editorial.nombre}")
     @NotBlank(message = "{NotBlank.editorial.nombre}")
     @Column(name = "nombre", nullable = false)
     private String nombre;
