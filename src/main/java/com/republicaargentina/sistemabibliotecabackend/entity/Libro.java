@@ -32,7 +32,8 @@ public class Libro extends BaseEntity {
     @Column(name = "anio")
     private Integer anio;
 
-    @Column(name = "grado")
+    @NotNull(message = "{NotNull.libro.grado}")
+    @Column(name = "grado", nullable = false)
     private String grado;
 
     @NotNull(message = "{NotNull.libro.area}")
