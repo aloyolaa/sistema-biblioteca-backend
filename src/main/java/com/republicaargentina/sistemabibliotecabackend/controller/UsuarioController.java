@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/usuarios")
 @PreAuthorize("hasRole('ADMIN')")
-@CrossOrigin(origins = {"http://192.168.1.37:80", "*"})
+@CrossOrigin(origins = {"{ips.permitidas}", "*"})
 public class UsuarioController {
     private final UsuarioService usuarioService;
 

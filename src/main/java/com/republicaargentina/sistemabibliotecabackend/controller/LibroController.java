@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/libros")
 @PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
-@CrossOrigin(origins = {"http://192.168.1.37:80", "*"})
+@CrossOrigin(origins = {"{ips.permitidas}", "*"})
 public class LibroController {
     private final LibroService libroService;
     private static final String XLS_CONTENT_TYPE = "Content-Type";

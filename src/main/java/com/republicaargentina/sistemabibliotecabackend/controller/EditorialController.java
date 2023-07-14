@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/editoriales")
 @PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
-@CrossOrigin(origins = {"http://192.168.1.37:80", "*"})
+@CrossOrigin(origins = {"{ips.permitidas}", "*"})
 public class EditorialController {
     private final EditorialService editorialService;
 

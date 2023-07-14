@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/materiales")
 @PreAuthorize("hasAnyRole({'USER', 'ADMIN'})")
-@CrossOrigin(origins = {"http://192.168.1.37:80", "*"})
+@CrossOrigin(origins = {"{ips.permitidas}", "*"})
 public class MaterialController {
     private final MaterialService materialService;
 
