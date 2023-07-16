@@ -82,11 +82,6 @@ public class MaterialController {
         return new ResponseEntity<>(materialService.paginationByArea(id, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/export-pdf-1")
-    public ResponseEntity<Resource> exportPDF() {
-        return materialService.exportPDF();
-    }
-
     @GetMapping("/export-all-pdf")
     public ResponseEntity<byte[]> exportAllToPdf() {
         HttpHeaders headers = new HttpHeaders();

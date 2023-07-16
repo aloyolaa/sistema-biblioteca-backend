@@ -61,6 +61,7 @@ public class AutorServiceImpl implements AutorService {
                 .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + autor.getId()));
         try {
             autorById.setNombre(autor.getNombre());
+            autorById.setApellido(autor.getApellido());
             return autorRepository.save(cambiarLetras(autorById));
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Error al actualizar los datos. Inténtelo mas tarde.", e);
